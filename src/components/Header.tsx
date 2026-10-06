@@ -1,12 +1,15 @@
 import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { useLanguage } from '../context/LanguageContext';
-import { Menu, X, Globe } from 'lucide-react';
+import { useAuth } from '../context/AuthContext';
+import { Menu, X, Globe, LogOut, User } from 'lucide-react';
 import { Language } from '../types';
 
 export default function Header() {
   const { language, setLanguage, t } = useLanguage();
+  const { user, isAuthenticated, logout } = useAuth();
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [userMenuOpen, setUserMenuOpen] = useState(false);
   const location = useLocation();
 
   const navItems = [
@@ -57,9 +60,9 @@ export default function Header() {
             ))}
           </nav>
 
-          {/* Language Switcher + Mobile Menu */}
+          {/* Language Switcher + Auth + Mobile Menu */}
           <div className="flex items-center gap-2">
-            <div className="flex items-center gap-1 bg-gray-100 rounded-lg p-1">
+            <div className="hidden sm:flex items-center gap-1 bg-gray-100 rounded-lg p-1">
               {languages.map((lang) => (
                 <button
                   key={lang.code}
@@ -75,6 +78,71 @@ export default function Header() {
                 </button>
               ))}
             </div>
+
+            {/* Auth Section */}
+            {isAuthenticated && user ? (
+              <div className="relative">
+                <button
+                  onClick={() => setUserMenuOpen(!userMenuOpen)}
+                  className="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-gray-100 transition-colors"
+                >
+                  <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-teal-500 rounded-full flex items-center justify-center text-white text-sm font-medium">
+                    {user.name.charAt(0).toUpperCase()}
+                  </div>
+                  <span className="hidden md:block text-sm font-medium text-gray-700">
+                    {user.name}
+                  </span>
+                </button>
+                
+                {userMenuOpen && (
+                  <div className="absolute right-0 mt-2 w-48 bg-white rounded-xl shadow-lg border border-gray-100 py-2 z-50">
+                    <div className="px-4 py-2 border-b border-gray-100">
+                      <p className="text-sm font-medium text-gray-900">{user.name}</p>
+                      <p className="text-xs text-gray-500">{user.email}</p>
+                      <span className={`inline-block mt-1 px-2 py-0.5 rounded-full text-xs font-medium ${
+                        user.role === 'ADMIN' ? 'bg-red-50 text-red-700' :
+                        user.role === 'AGENCY' ? 'bg-green-50 text-green-700' :
+                        'bg-blue-50 text-blue-700'
+                      }`}>
+                        {user.role}
+                      </span>
+                    </div>
+                    {user.role === 'AGENCY' && (
+                      <Link
+                        to="/dashboard"
+                        onClick={() => setUserMenuOpen(false)}
+                        className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50"
+                      >
+                        {t('nav.dashboard')}
+                      </Link>
+                    )}
+                    {user.role === 'ADMIN' && (
+                      <Link
+                        to="/admin"
+                        onClick={() => setUserMenuOpen(false)}
+                        className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50"
+                      >
+                        {t('nav.admin')}
+                      </Link>
+                    )}
+                    <button
+                      onClick={() => { logout(); setUserMenuOpen(false); }}
+                      className="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50 flex items-center gap-2"
+                    >
+                      <LogOut size={14} />
+                      {t('nav.logout')}
+                    </button>
+                  </div>
+                )}
+              </div>
+            ) : (
+              <Link
+                to="/login"
+                className="px-4 py-2 bg-blue-600 text-white rounded-lg text-sm font-medium hover:bg-blue-700 transition-colors"
+              >
+                {t('nav.login')}
+              </Link>
+            )}
 
             <button
               className="lg:hidden p-2 rounded-lg hover:bg-gray-100"
