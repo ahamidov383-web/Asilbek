@@ -15,6 +15,7 @@ import Dashboard from './pages/Dashboard';
 import Admin from './pages/Admin';
 import Login from './pages/Login';
 import Register from './pages/Register';
+import AgencyProfile from './pages/AgencyProfile';
 
 function App() {
   return (
@@ -30,6 +31,7 @@ function App() {
                 <Route path="/login" element={<Login />} />
                 <Route path="/register" element={<Register />} />
                 <Route path="/agencies" element={<Agencies />} />
+                <Route path="/agencies/:id" element={<AgencyProfile />} />
                 <Route path="/tours" element={<Tours />} />
                 <Route path="/places" element={<Places />} />
                 <Route path="/restaurants" element={<Restaurants />} />

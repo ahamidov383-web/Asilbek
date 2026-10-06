@@ -21,6 +21,21 @@ export interface Agency {
   tours: Tour[];
   rating: number;
   reviewCount: number;
+  email?: string;
+  phone?: string;
+  address?: string;
+  website?: string;
+  establishedYear?: number;
+  languages?: string[];
+  specialties?: string[];
+  workingHours?: string;
+  socialMedia?: {
+    telegram?: string;
+    instagram?: string;
+    facebook?: string;
+  };
+  about?: string;
+  achievements?: string[];
 }
 
 export interface Tour {

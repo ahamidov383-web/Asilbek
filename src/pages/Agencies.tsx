@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { useLanguage } from '../context/LanguageContext';
 import { agencies, tours } from '../data/mock';
 import { Search, BadgeCheck, Star, MapPin } from 'lucide-react';
@@ -56,9 +57,10 @@ export default function Agencies() {
         {/* Agency Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {filtered.map((agency) => (
-            <div
+            <Link
               key={agency.id}
-              className="bg-white rounded-2xl p-6 shadow-sm hover:shadow-lg transition-all duration-300 border border-gray-100"
+              to={`/agencies/${agency.id}`}
+              className="bg-white rounded-2xl p-6 shadow-sm hover:shadow-lg transition-all duration-300 border border-gray-100 block"
             >
               <div className="flex items-start gap-4 mb-4">
                 <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-blue-50 to-teal-50 flex items-center justify-center text-3xl">
@@ -79,18 +81,22 @@ export default function Agencies() {
                 </div>
               </div>
               <p className="text-sm text-gray-500 mb-4 line-clamp-2">{agency.description}</p>
-              <div className="flex items-center justify-between">
+              <div className="flex items-center justify-between pt-4 border-t border-gray-100">
                 <div className="flex items-center gap-4 text-sm text-gray-500">
                   <span className="flex items-center gap-1">
                     <MapPin size={14} />
                     {getTourCount(agency.id)} {t('agencies.tours')}
                   </span>
+                  <span className="flex items-center gap-1">
+                    <Star size={14} className="text-amber-400 fill-amber-400" />
+                    {agency.rating}
+                  </span>
                 </div>
-                <button className="px-4 py-2 bg-blue-50 text-blue-700 rounded-lg text-sm font-medium hover:bg-blue-100 transition-colors">
-                  {t('agencies.viewProfile')}
-                </button>
+                <span className="text-blue-600 text-sm font-medium flex items-center gap-1">
+                  Batafsil →
+                </span>
               </div>
-            </div>
+            </Link>
           ))}
         </div>
 
