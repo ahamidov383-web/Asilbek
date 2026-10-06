@@ -1,10 +1,14 @@
 import React, { useState } from 'react';
 import { useLanguage } from '../context/LanguageContext';
+import { useAuth } from '../context/AuthContext';
+import { useNavigate } from 'react-router-dom';
 import { tours, tourRequests } from '../data/mock';
-import { Plus, Users, DollarSign, Star, Send, Calendar, TrendingUp, CheckCircle, XCircle, Clock } from 'lucide-react';
+import { Plus, Users, DollarSign, Star, Send, Calendar, TrendingUp, CheckCircle, XCircle, Clock, LogOut } from 'lucide-react';
 
 export default function Dashboard() {
   const { t } = useLanguage();
+  const { user, logout } = useAuth();
+  const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState<'tours' | 'requests' | 'offers'>('tours');
   const [showAddTour, setShowAddTour] = useState(false);
   const [localTours, setLocalTours] = useState(tours.slice(0, 3));
@@ -56,12 +60,21 @@ export default function Dashboard() {
               <h1 className="text-3xl font-bold mb-2">{t('dashboard.title')}</h1>
               <p className="text-indigo-200">Silk Road Adventures</p>
             </div>
-            <div className="hidden md:flex items-center gap-2 bg-white/10 backdrop-blur-sm rounded-xl px-4 py-2">
-              <div className="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center text-xl">🏛️</div>
-              <div>
-                <div className="text-sm font-medium">Verified Agency</div>
-                <div className="text-xs text-indigo-200">Since 2020</div>
+            <div className="flex items-center gap-3">
+              <div className="hidden md:flex items-center gap-2 bg-white/10 backdrop-blur-sm rounded-xl px-4 py-2">
+                <div className="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center text-xl">🏛️</div>
+                <div>
+                  <div className="text-sm font-medium">{user?.name || 'Agency'}</div>
+                  <div className="text-xs text-indigo-200">Verified Agency</div>
+                </div>
               </div>
+              <button
+                onClick={() => { logout(); navigate('/login'); }}
+                className="flex items-center gap-2 px-4 py-2 bg-white/10 backdrop-blur-sm rounded-xl text-sm font-medium text-white hover:bg-white/20 transition-colors"
+              >
+                <LogOut size={16} />
+                <span className="hidden md:inline">Chiqish</span>
+              </button>
             </div>
           </div>
         </div>

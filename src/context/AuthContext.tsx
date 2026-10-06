@@ -4,8 +4,22 @@ import { User, Role } from '../types';
 interface AuthContextType {
   user: User | null;
   login: (email: string, password: string, role: Role) => Promise<{ success: boolean; error?: string }>;
+  register: (data: RegisterData) => Promise<{ success: boolean; error?: string }>;
   logout: () => void;
   isAuthenticated: boolean;
+}
+
+interface RegisterData {
+  name: string;
+  email: string;
+  password: string;
+  role: Role;
+  agencyName?: string;
+  description?: string;
+  phone?: string;
+  address?: string;
+  license?: string;
+  country?: string;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -68,13 +82,30 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     return { success: true };
   };
 
+  const register = async (data: RegisterData): Promise<{ success: boolean; error?: string }> => {
+    // Simulate API call
+    await new Promise(resolve => setTimeout(resolve, 1000));
+
+    // Check if email already exists
+    const exists = mockUsers.find(u => u.email === data.email);
+    if (exists) {
+      return { success: false, error: "Bu email allaqachon ro'yxatdan o'tgan!" };
+    }
+
+    // For demo purposes, we just return success
+    // In real app, this would create a new user in the database
+    console.log('Register data:', data);
+    
+    return { success: true };
+  };
+
   const logout = () => {
     setUser(null);
     localStorage.removeItem('auth_user');
   };
 
   return (
-    <AuthContext.Provider value={{ user, login, logout, isAuthenticated: !!user }}>
+    <AuthContext.Provider value={{ user, login, register, logout, isAuthenticated: !!user }}>
       {children}
     </AuthContext.Provider>
   );

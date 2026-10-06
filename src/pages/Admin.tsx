@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
 import { useLanguage } from '../context/LanguageContext';
+import { useAuth } from '../context/AuthContext';
+import { useNavigate } from 'react-router-dom';
 import { agencies } from '../data/mock';
-import { BadgeCheck, XCircle, Shield, Users, FileText, AlertTriangle, CheckCircle, Eye } from 'lucide-react';
+import { BadgeCheck, XCircle, Shield, Users, FileText, AlertTriangle, CheckCircle, Eye, LogOut } from 'lucide-react';
 
 interface AgencyStatus {
   id: string;
@@ -15,6 +17,8 @@ interface AgencyStatus {
 
 export default function Admin() {
   const { t } = useLanguage();
+  const { user, logout } = useAuth();
+  const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState<'agencies' | 'content' | 'users'>('agencies');
   const [agencyStatuses, setAgencyStatuses] = useState<AgencyStatus[]>([
     { id: '1', name: 'Silk Road Adventures', logo: '🏛️', isVerified: true, status: 'verified', submittedAt: '2026-01-15', description: 'Premium tours along the ancient Silk Road.' },
@@ -61,11 +65,22 @@ export default function Admin() {
       {/* Header */}
       <div className="bg-gradient-to-r from-gray-800 to-gray-900 text-white py-12">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center gap-3 mb-2">
-            <Shield size={28} className="text-amber-400" />
-            <h1 className="text-3xl font-bold">{t('admin.title')}</h1>
+          <div className="flex items-center justify-between">
+            <div>
+              <div className="flex items-center gap-3 mb-2">
+                <Shield size={28} className="text-amber-400" />
+                <h1 className="text-3xl font-bold">{t('admin.title')}</h1>
+              </div>
+              <p className="text-gray-400">Manage agencies, content, and users</p>
+            </div>
+            <button
+              onClick={() => { logout(); navigate('/login'); }}
+              className="flex items-center gap-2 px-4 py-2 bg-white/10 backdrop-blur-sm rounded-xl text-sm font-medium text-white hover:bg-white/20 transition-colors"
+            >
+              <LogOut size={16} />
+              <span className="hidden md:inline">Chiqish</span>
+            </button>
           </div>
-          <p className="text-gray-400">Manage agencies, content, and users</p>
         </div>
       </div>
 
