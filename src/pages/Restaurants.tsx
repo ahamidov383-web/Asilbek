@@ -1,26 +1,35 @@
 import React, { useState } from 'react';
 import { useLanguage } from '../context/LanguageContext';
 import { restaurants } from '../data/mock';
-import { Search, Star, DollarSign, Utensils, MapPin, ChefHat } from 'lucide-react';
+import { termizRestaurants, priceIndicators } from '../data/termiz';
+import { Search, Star, DollarSign, Utensils, MapPin, ChefHat, TrendingUp } from 'lucide-react';
 
 export default function Restaurants() {
   const { t } = useLanguage();
   const [foodSearch, setFoodSearch] = useState('');
   const [restSearch, setRestSearch] = useState('');
   const [selectedRest, setSelectedRest] = useState<string | null>(null);
+  const [cityFilter, setCityFilter] = useState<'all' | 'termiz' | 'other'>('all');
+  const [showPriceGuide, setShowPriceGuide] = useState(false);
 
-  const filtered = restaurants.filter((rest) => {
+  // Barcha restoranlarni birlashtirish
+  const allRestaurants = [...restaurants, ...termizRestaurants];
+
+  const filtered = allRestaurants.filter((rest) => {
     const matchFood = !foodSearch ||
       rest.cuisineType.some(c => c.toLowerCase().includes(foodSearch.toLowerCase())) ||
       rest.menuItems.some(m => m.name.toLowerCase().includes(foodSearch.toLowerCase()));
     const matchRest = !restSearch ||
       rest.name.toLowerCase().includes(restSearch.toLowerCase());
-    return matchFood && matchRest;
+    const matchCity = cityFilter === 'all' || 
+      (cityFilter === 'termiz' && termizRestaurants.some(r => r.id === rest.id)) ||
+      (cityFilter === 'other' && !termizRestaurants.some(r => r.id === rest.id));
+    return matchFood && matchRest && matchCity;
   });
 
-  const selected = restaurants.find(r => r.id === selectedRest);
+  const selected = allRestaurants.find(r => r.id === selectedRest);
 
-  const popularFoods = ['plov', 'shashlik', 'lagman', 'samsa', 'tea', 'bread', 'noodles', 'grill'];
+  const popularFoods = ['plov', 'osh', 'shashlik', 'lagman', 'lag\'mon', 'somsa', 'somsa', 'kabob', 'tea', 'choy', 'bread', 'non', 'noodles', 'grill', 'go\'sht'];
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -33,6 +42,84 @@ export default function Restaurants() {
       </div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        {/* City Filter */}
+        <div className="flex gap-2 mb-4">
+          <button
+            onClick={() => setCityFilter('all')}
+            className={`px-4 py-2 rounded-xl text-sm font-medium transition-all ${
+              cityFilter === 'all'
+                ? 'bg-orange-600 text-white'
+                : 'bg-white border border-gray-200 text-gray-600 hover:bg-gray-50'
+            }`}
+          >
+            Barcha shaharlar
+          </button>
+          <button
+            onClick={() => setCityFilter('termiz')}
+            className={`px-4 py-2 rounded-xl text-sm font-medium transition-all ${
+              cityFilter === 'termiz'
+                ? 'bg-orange-600 text-white'
+                : 'bg-white border border-gray-200 text-gray-600 hover:bg-gray-50'
+            }`}
+          >
+            🏛️ Termiz
+          </button>
+          <button
+            onClick={() => setCityFilter('other')}
+            className={`px-4 py-2 rounded-xl text-sm font-medium transition-all ${
+              cityFilter === 'other'
+                ? 'bg-orange-600 text-white'
+                : 'bg-white border border-gray-200 text-gray-600 hover:bg-gray-50'
+            }`}
+          >
+            Boshqa shaharlar
+          </button>
+        </div>
+
+        {/* Price Guide */}
+        <div className="mb-6 bg-gradient-to-r from-orange-50 to-red-50 rounded-2xl p-6 border border-orange-100">
+          <div className="flex items-center justify-between mb-3">
+            <h3 className="text-lg font-bold text-gray-900 flex items-center gap-2">
+              <TrendingUp size={20} className="text-orange-600" />
+              Narx ko'rsatkichlari
+            </h3>
+            <button
+              onClick={() => setShowPriceGuide(!showPriceGuide)}
+              className="text-sm text-orange-600 hover:text-orange-700 font-medium"
+            >
+              {showPriceGuide ? 'Yashirish' : 'Ko\'rsatish'}
+            </button>
+          </div>
+          {showPriceGuide && (
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
+              <div className="bg-white rounded-xl p-4">
+                <div className="text-sm font-semibold text-gray-700 mb-2">💰 Byudjet</div>
+                <div className="text-lg font-bold text-green-600">
+                  {priceIndicators.food.budget.min.toLocaleString()} - {priceIndicators.food.budget.max.toLocaleString()} so'm
+                </div>
+                <div className="text-xs text-gray-500 mt-1">{priceIndicators.food.budget.description}</div>
+              </div>
+              <div className="bg-white rounded-xl p-4">
+                <div className="text-sm font-semibold text-gray-700 mb-2">💵 O'rtacha</div>
+                <div className="text-lg font-bold text-blue-600">
+                  {priceIndicators.food.mid_range.min.toLocaleString()} - {priceIndicators.food.mid_range.max.toLocaleString()} so'm
+                </div>
+                <div className="text-xs text-gray-500 mt-1">{priceIndicators.food.mid_range.description}</div>
+              </div>
+              <div className="bg-white rounded-xl p-4">
+                <div className="text-sm font-semibold text-gray-700 mb-2">💎 Qimmat</div>
+                <div className="text-lg font-bold text-purple-600">
+                  {priceIndicators.food.expensive.min.toLocaleString()} - {priceIndicators.food.expensive.max.toLocaleString()} so'm
+                </div>
+                <div className="text-xs text-gray-500 mt-1">{priceIndicators.food.expensive.description}</div>
+              </div>
+            </div>
+          )}
+          <div className="text-xs text-gray-500 mt-3">
+            💱 Valyuta: {priceIndicators.currency} | {priceIndicators.exchange_rate}
+          </div>
+        </div>
+
         {/* Food Search */}
         <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 mb-8">
           <h3 className="font-semibold text-gray-900 mb-3 flex items-center gap-2">

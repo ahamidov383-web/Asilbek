@@ -110,3 +110,28 @@ export interface MenuItem {
   price: number;
   description: string;
 }
+
+export interface TransportRoute {
+  id: string;
+  name: string;
+  type: 'bus' | 'minibus' | 'metro';
+  from: string;
+  to: string;
+  price: number;
+  stops: RouteStop[];
+}
+
+export interface BusStop {
+  id: string;
+  name: string;
+  latitude: number;
+  longitude: number;
+}
+
+export interface RouteStop {
+  stopId: string;
+  stopName: string;
+  order: number;
+  latitude: number;
+  longitude: number;
+}

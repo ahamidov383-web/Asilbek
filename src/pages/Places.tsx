@@ -1,14 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import { useLanguage } from '../context/LanguageContext';
 import { places } from '../data/mock';
-import { Search, MapPin, Clock, DollarSign, Bus } from 'lucide-react';
+import { termizPlaces, termizRoutes, termizBusStops } from '../data/termiz';
+import { Search, MapPin, Clock, DollarSign, Bus, Navigation } from 'lucide-react';
 
 export default function Places() {
   const { t } = useLanguage();
   const [search, setSearch] = useState('');
   const [typeFilter, setTypeFilter] = useState('All');
+  const [cityFilter, setCityFilter] = useState<'all' | 'termiz' | 'other'>('all');
   const [selectedPlace, setSelectedPlace] = useState<string | null>(null);
   const [MapComponent, setMapComponent] = useState<any>(null);
+  const [showRoutes, setShowRoutes] = useState(false);
 
   // Dinamik import - faqat client-side da
   useEffect(() => {
@@ -19,16 +22,21 @@ export default function Places() {
     }
   }, []);
 
-  const types = ['All', ...Array.from(new Set(places.map(p => p.type)))];
+  // Barcha joylarni birlashtirish
+  const allPlaces = [...places, ...termizPlaces];
+  const types = ['All', ...Array.from(new Set(allPlaces.map(p => p.type)))];
 
-  const filtered = places.filter((place) => {
+  const filtered = allPlaces.filter((place) => {
     const matchSearch = place.name.toLowerCase().includes(search.toLowerCase()) ||
       place.description.toLowerCase().includes(search.toLowerCase());
     const matchType = typeFilter === 'All' || place.type === typeFilter;
-    return matchSearch && matchType;
+    const matchCity = cityFilter === 'all' || 
+      (cityFilter === 'termiz' && termizPlaces.some(p => p.id === place.id)) ||
+      (cityFilter === 'other' && !termizPlaces.some(p => p.id === place.id));
+    return matchSearch && matchType && matchCity;
   });
 
-  const selected = places.find(p => p.id === selectedPlace);
+  const selected = allPlaces.find(p => p.id === selectedPlace);
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -41,8 +49,42 @@ export default function Places() {
       </div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* Search & Filter */}
-        <div className="flex flex-col sm:flex-row gap-4 mb-8">
+        {/* City Filter */}
+        <div className="flex gap-2 mb-4">
+          <button
+            onClick={() => setCityFilter('all')}
+            className={`px-4 py-2 rounded-xl text-sm font-medium transition-all ${
+              cityFilter === 'all'
+                ? 'bg-blue-600 text-white'
+                : 'bg-white border border-gray-200 text-gray-600 hover:bg-gray-50'
+            }`}
+          >
+            Barcha shaharlar
+          </button>
+          <button
+            onClick={() => setCityFilter('termiz')}
+            className={`px-4 py-2 rounded-xl text-sm font-medium transition-all ${
+              cityFilter === 'termiz'
+                ? 'bg-blue-600 text-white'
+                : 'bg-white border border-gray-200 text-gray-600 hover:bg-gray-50'
+            }`}
+          >
+            🏛️ Termiz
+          </button>
+          <button
+            onClick={() => setCityFilter('other')}
+            className={`px-4 py-2 rounded-xl text-sm font-medium transition-all ${
+              cityFilter === 'other'
+                ? 'bg-blue-600 text-white'
+                : 'bg-white border border-gray-200 text-gray-600 hover:bg-gray-50'
+            }`}
+          >
+            Boshqa shaharlar
+          </button>
+        </div>
+
+        {/* Search & Type Filter */}
+        <div className="flex flex-col sm:flex-row gap-4 mb-4">
           <div className="relative flex-1">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={18} />
             <input
@@ -69,6 +111,62 @@ export default function Places() {
             ))}
           </div>
         </div>
+
+        {/* Transport Routes (Termiz) */}
+        {cityFilter === 'termiz' && (
+          <div className="mb-8 bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="text-lg font-bold text-gray-900 flex items-center gap-2">
+                <Bus size={20} className="text-blue-600" />
+                Termiz transport yo'nalishlari
+              </h3>
+              <button
+                onClick={() => setShowRoutes(!showRoutes)}
+                className="text-sm text-blue-600 hover:text-blue-700 font-medium"
+              >
+                {showRoutes ? 'Yashirish' : 'Ko\'rsatish'}
+              </button>
+            </div>
+            {showRoutes && (
+              <div className="space-y-4">
+                {termizRoutes.map((route) => (
+                  <div key={route.id} className="border border-gray-200 rounded-xl p-4">
+                    <div className="flex items-center justify-between mb-3">
+                      <div className="flex items-center gap-3">
+                        <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
+                          <Bus size={20} className="text-blue-600" />
+                        </div>
+                        <div>
+                          <h4 className="font-semibold text-gray-900">{route.name}</h4>
+                          <p className="text-sm text-gray-500">{route.from} → {route.to}</p>
+                        </div>
+                      </div>
+                      <div className="text-right">
+                        <div className="text-lg font-bold text-blue-600">{route.price.toLocaleString()} so'm</div>
+                        <div className="text-xs text-gray-500">chipta narxi</div>
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-2 overflow-x-auto pb-2">
+                      {route.stops.map((stop, index) => (
+                        <React.Fragment key={stop.stopId}>
+                          <div className="flex items-center gap-2 flex-shrink-0">
+                            <div className="w-6 h-6 bg-blue-500 text-white rounded-full flex items-center justify-center text-xs font-bold">
+                              {index + 1}
+                            </div>
+                            <span className="text-sm text-gray-700 whitespace-nowrap">{stop.stopName}</span>
+                          </div>
+                          {index < route.stops.length - 1 && (
+                            <div className="w-8 h-0.5 bg-gray-300 flex-shrink-0" />
+                          )}
+                        </React.Fragment>
+                      ))}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        )}
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           {/* Places List */}
