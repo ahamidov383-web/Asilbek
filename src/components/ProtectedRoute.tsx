@@ -12,12 +12,12 @@ export default function ProtectedRoute({ children, allowedRoles }: ProtectedRout
   const { isAuthenticated, user } = useAuth();
   const location = useLocation();
 
-  // 1. Agar foydalanuvchi kirmagan bo'lsa va bu himoyalangan yo'l bo'lsa
+  // Agar foydalanuvchi kirmagan bo'lsa
   if (!isAuthenticated) {
     return <Navigate to="/login" state={{ from: location }} replace />;
   }
 
-  // 2. Agar ruxsat etilgan rollar ko'rsatilgan bo'lsa va foydalanuvchi roli mos kelmasa
+  // Agar ruxsat etilgan rollar ko'rsatilgan bo'lsa va foydalanuvchi roli mos kelmasa
   if (allowedRoles && user && !allowedRoles.includes(user.role)) {
     return <Navigate to="/login?error=access_denied" replace />;
   }
