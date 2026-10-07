@@ -1,26 +1,23 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useLanguage } from '../context/LanguageContext';
 import { places } from '../data/mock';
-import { Search, MapPin, Clock, DollarSign, Bus, Filter } from 'lucide-react';
-import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
-import L from 'leaflet';
-
-// Fix default marker icon
-const defaultIcon = L.icon({
-  iconUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png',
-  iconRetinaUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon-2x.png',
-  shadowUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png',
-  iconSize: [25, 41],
-  iconAnchor: [12, 41],
-  popupAnchor: [1, -34],
-  shadowSize: [41, 41],
-});
+import { Search, MapPin, Clock, DollarSign, Bus } from 'lucide-react';
 
 export default function Places() {
   const { t } = useLanguage();
   const [search, setSearch] = useState('');
   const [typeFilter, setTypeFilter] = useState('All');
   const [selectedPlace, setSelectedPlace] = useState<string | null>(null);
+  const [MapComponent, setMapComponent] = useState<any>(null);
+
+  // Dinamik import - faqat client-side da
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      import('react-leaflet').then((module) => {
+        setMapComponent(() => module);
+      });
+    }
+  }, []);
 
   const types = ['All', ...Array.from(new Set(places.map(p => p.type)))];
 
@@ -115,38 +112,44 @@ export default function Places() {
           </div>
 
           {/* Map */}
-          <div className="lg:sticky lg:top-24 h-[500px] lg:h-[calc(100vh-200px)] rounded-2xl overflow-hidden shadow-sm border border-gray-200">
-            <MapContainer
-              center={[39.6542, 66.9758]}
-              zoom={6}
-              style={{ height: '100%', width: '100%' }}
-              scrollWheelZoom={true}
-            >
-              <TileLayer
-                attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-                url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-              />
-              {filtered.map((place) => (
-                <Marker
-                  key={place.id}
-                  position={[place.latitude, place.longitude]}
-                  icon={defaultIcon}
-                  eventHandlers={{
-                    click: () => setSelectedPlace(place.id),
-                  }}
-                >
-                  <Popup>
-                    <div className="text-sm">
-                      <strong>{place.name}</strong>
-                      <br />
-                      {place.type}
-                      <br />
-                      {place.ticketPrice}
-                    </div>
-                  </Popup>
-                </Marker>
-              ))}
-            </MapContainer>
+          <div className="lg:sticky lg:top-24 h-[500px] lg:h-[calc(100vh-200px)] rounded-2xl overflow-hidden shadow-sm border border-gray-200 bg-gray-100 flex items-center justify-center">
+            {MapComponent ? (
+              <MapComponent.MapContainer
+                center={[39.6542, 66.9758]}
+                zoom={6}
+                style={{ height: '100%', width: '100%' }}
+                scrollWheelZoom={true}
+              >
+                <MapComponent.TileLayer
+                  attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+                  url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                />
+                {filtered.map((place) => (
+                  <MapComponent.Marker
+                    key={place.id}
+                    position={[place.latitude, place.longitude]}
+                    eventHandlers={{
+                      click: () => setSelectedPlace(place.id),
+                    }}
+                  >
+                    <MapComponent.Popup>
+                      <div className="text-sm">
+                        <strong>{place.name}</strong>
+                        <br />
+                        {place.type}
+                        <br />
+                        {place.ticketPrice}
+                      </div>
+                    </MapComponent.Popup>
+                  </MapComponent.Marker>
+                ))}
+              </MapComponent.MapContainer>
+            ) : (
+              <div className="text-center text-gray-500">
+                <div className="text-4xl mb-2">🗺️</div>
+                <p>Xarita yuklanmoqda...</p>
+              </div>
+            )}
           </div>
         </div>
 
