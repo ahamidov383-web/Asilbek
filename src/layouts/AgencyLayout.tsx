@@ -23,8 +23,8 @@ export default function AgencyLayout({ children }: { children: React.ReactNode }
 
   const navItems = [
     { path: '/dashboard', label: 'Boshqaruv paneli', icon: LayoutDashboard },
-    { path: '/dashboard/offers', label: 'Takliflar', icon: Inbox, badge: 3 },
     { path: '/dashboard/tours', label: 'Mening turlarim', icon: Map },
+    { path: '/dashboard/offers', label: 'Takliflar', icon: Inbox, badge: 3 },
     { path: '/dashboard/requests', label: 'Mijoz so\'rovlari', icon: Inbox },
     { path: '/dashboard/seats', label: 'Bo\'sh joylar', icon: Calendar },
     { path: '/dashboard/settings', label: 'Sozlamalar', icon: Settings },

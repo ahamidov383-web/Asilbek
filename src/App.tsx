@@ -3,6 +3,7 @@ import { BrowserRouter, Routes, Route, Outlet } from 'react-router-dom';
 import { LanguageProvider } from './context/LanguageContext';
 import { AuthProvider } from './context/AuthContext';
 import { RequestProvider } from './context/RequestContext';
+import { AgencyProvider } from './context/AgencyContext';
 
 // Layouts
 import TouristLayout from './layouts/TouristLayout';
@@ -30,6 +31,8 @@ import Register from './pages/Register';
 // Agency Pages
 import Dashboard from './pages/Dashboard';
 import Offers from './pages/Offers';
+import ToursManagement from './pages/ToursManagement';
+import TourForm from './pages/TourForm';
 
 // Admin Pages
 import Admin from './pages/Admin';
@@ -58,7 +61,8 @@ function App() {
     <AuthProvider>
       <LanguageProvider>
         <RequestProvider>
-          <BrowserRouter>
+          <AgencyProvider>
+            <BrowserRouter>
             <Routes>
               {/* Tourist Routes - Public */}
               <Route element={<TouristLayout><Outlet /></TouristLayout>}>
@@ -78,20 +82,21 @@ function App() {
                 <Route path="/register" element={<Register />} />
               </Route>
 
-              {/* Agency Routes - Protected */}
-              <Route element={
-                <ProtectedRoute allowedRoles={['AGENCY']}>
-                  <AgencyLayout><Outlet /></AgencyLayout>
-                </ProtectedRoute>
-              }>
-                <Route path="/dashboard" element={<Dashboard />} />
-                <Route path="/dashboard/offers" element={<Offers />} />
-                <Route path="/dashboard/tours" element={<AgencyPlaceholder title="Mening turlarim" />} />
-                <Route path="/dashboard/requests" element={<AgencyPlaceholder title="Mijoz so'rovlari" />} />
-                <Route path="/dashboard/seats" element={<AgencyPlaceholder title="Bo'sh joylar" />} />
-                <Route path="/dashboard/settings" element={<AgencyPlaceholder title="Sozlamalar" />} />
-              </Route>
-
+            {/* Agency Routes - Protected */}
+            <Route element={
+              <ProtectedRoute allowedRoles={['AGENCY']}>
+                <AgencyLayout><Outlet /></AgencyLayout>
+              </ProtectedRoute>
+            }>
+              <Route path="/dashboard" element={<Dashboard />} />
+              <Route path="/dashboard/offers" element={<Offers />} />
+              <Route path="/dashboard/tours" element={<ToursManagement />} />
+              <Route path="/dashboard/tours/new" element={<TourForm />} />
+              <Route path="/dashboard/tours/:id/edit" element={<TourForm />} />
+              <Route path="/dashboard/requests" element={<AgencyPlaceholder title="Mijoz so'rovlari" />} />
+              <Route path="/dashboard/seats" element={<AgencyPlaceholder title="Bo'sh joylar" />} />
+              <Route path="/dashboard/settings" element={<AgencyPlaceholder title="Sozlamalar" />} />
+            </Route>
               {/* Admin Routes - Protected */}
               <Route element={
                 <ProtectedRoute allowedRoles={['ADMIN']}>
@@ -106,9 +111,10 @@ function App() {
               </Route>
             </Routes>
           </BrowserRouter>
-        </RequestProvider>
-      </LanguageProvider>
-    </AuthProvider>
+        </AgencyProvider>
+      </RequestProvider>
+    </LanguageProvider>
+  </AuthProvider>
   );
 }
 
