@@ -4,6 +4,8 @@ import { LanguageProvider } from './context/LanguageContext';
 import { AuthProvider } from './context/AuthContext';
 import { RequestProvider } from './context/RequestContext';
 import { AgencyProvider } from './context/AgencyContext';
+import { AuditLogProvider } from './context/AuditLogContext';
+import { AdminProvider } from './context/AdminContext';
 
 // Layouts
 import TouristLayout from './layouts/TouristLayout';
@@ -60,9 +62,11 @@ function App() {
   return (
     <AuthProvider>
       <LanguageProvider>
-        <RequestProvider>
-          <AgencyProvider>
-            <BrowserRouter>
+        <AuditLogProvider>
+          <RequestProvider>
+            <AgencyProvider>
+              <AdminProvider>
+                <BrowserRouter>
             <Routes>
               {/* Tourist Routes - Public */}
               <Route element={<TouristLayout><Outlet /></TouristLayout>}>
@@ -111,9 +115,11 @@ function App() {
               </Route>
             </Routes>
           </BrowserRouter>
-        </AgencyProvider>
-      </RequestProvider>
-    </LanguageProvider>
+        </AdminProvider>
+      </AgencyProvider>
+    </RequestProvider>
+  </AuditLogProvider>
+</LanguageProvider>
   </AuthProvider>
   );
 }

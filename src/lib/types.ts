@@ -316,6 +316,37 @@ export interface CreateOfferForm {
 }
 
 // ============================================
+// AUDIT LOG
+// ============================================
+
+export interface AuditLog {
+  id: string;
+  userId: string | null;
+  action: string; // e.g., "AGENCY_APPROVED", "TOUR_CREATED"
+  entityType: string; // e.g., "Agency", "Tour"
+  entityId: string;
+  details?: Record<string, any>;
+  createdAt: string;
+  userName?: string;
+  userEmail?: string;
+}
+
+// Audit action tiplari
+export type AuditAction = 
+  | 'AGENCY_APPROVED'
+  | 'AGENCY_REJECTED'
+  | 'TOUR_CREATED'
+  | 'TOUR_UPDATED'
+  | 'TOUR_DELETED'
+  | 'OFFER_CREATED'
+  | 'OFFER_ACCEPTED'
+  | 'OFFER_REJECTED'
+  | 'REQUEST_CREATED'
+  | 'USER_LOGIN'
+  | 'USER_LOGOUT'
+  | 'USER_REGISTERED';
+
+// ============================================
 // API RESPONSE TIPLAR
 // ============================================
 

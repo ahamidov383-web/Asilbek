@@ -2,6 +2,7 @@ import React, { createContext, useContext, useState, useEffect, ReactNode } from
 import { useAuth } from './AuthContext';
 import { Agency, Tour } from '../lib/types';
 import { createTourSchema, validateData } from '../lib/validations';
+import { createAuditLog } from '../lib/audit-log';
 
 interface AgencyContextType {
   agency: Agency | null;
@@ -186,6 +187,24 @@ export function AgencyProvider({ children }: { children: ReactNode }) {
       };
 
       setTours(prev => [newTour, ...prev]);
+      
+      // Audit log
+      if (user) {
+        await createAuditLog(
+          'TOUR_CREATED',
+          'Tour',
+          newTour.id,
+          user.id,
+          {
+            tourTitle: newTour.title,
+            tourPrice: newTour.price,
+            agencyName: agency.name,
+          },
+          user.name,
+          user.email
+        );
+      }
+      
       return { success: true };
     } catch (err) {
       return { success: false, error: 'Tur yaratishda xatolik' };
@@ -204,6 +223,24 @@ export function AgencyProvider({ children }: { children: ReactNode }) {
       setTours(prev => prev.map(t => 
         t.id === tourId ? { ...t, ...data } : t
       ));
+      
+      // Audit log
+      if (user) {
+        await createAuditLog(
+          'TOUR_UPDATED',
+          'Tour',
+          tourId,
+          user.id,
+          {
+            tourTitle: tour.title,
+            changes: Object.keys(data),
+            agencyName: agency?.name,
+          },
+          user.name,
+          user.email
+        );
+      }
+      
       return { success: true };
     } catch (err) {
       return { success: false, error: 'Tur yangilashda xatolik' };
@@ -220,6 +257,23 @@ export function AgencyProvider({ children }: { children: ReactNode }) {
       await new Promise(resolve => setTimeout(resolve, 300));
 
       setTours(prev => prev.filter(t => t.id !== tourId));
+      
+      // Audit log
+      if (user) {
+        await createAuditLog(
+          'TOUR_DELETED',
+          'Tour',
+          tourId,
+          user.id,
+          {
+            tourTitle: tour.title,
+            agencyName: agency?.name,
+          },
+          user.name,
+          user.email
+        );
+      }
+      
       return { success: true };
     } catch (err) {
       return { success: false, error: 'Tur o\'chirishda xatolik' };
