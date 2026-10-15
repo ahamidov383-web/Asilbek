@@ -1,18 +1,4 @@
-"use client";
-
 import React, { useEffect, useState } from 'react';
-import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
-import L from 'leaflet';
-import 'leaflet/dist/leaflet.css';
-
-// Fix for default marker icons in Leaflet
-delete (L.Icon.Default.prototype as any)._getIconUrl;
-
-L.Icon.Default.mergeOptions({
-  iconRetinaUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon-2x.png',
-  iconUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon.png',
-  shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png',
-});
 
 interface MapMarker {
   id: string;
@@ -32,13 +18,37 @@ interface MapProps {
 }
 
 export default function Map({ center, zoom = 13, markers = [], height = '400px', className = '' }: MapProps) {
+  const [MapComponent, setMapComponent] = useState<any>(null);
   const [isMounted, setIsMounted] = useState(false);
 
+  // Dynamic import - faqat client-side da yuklanadi
   useEffect(() => {
     setIsMounted(true);
+
+    // react-leaflet ni dynamic import qilish
+    import('react-leaflet').then((module) => {
+      setMapComponent(() => module);
+    }).catch(err => {
+      console.error('react-leaflet import failed:', err);
+    });
   }, []);
 
-  if (!isMounted) {
+  // Leaflet icon fix
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      import('leaflet').then((L) => {
+        // Fix default marker icons
+        delete (L.default.Icon.Default.prototype as any)._getIconUrl;
+        L.default.Icon.Default.mergeOptions({
+          iconRetinaUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon-2x.png',
+          iconUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon.png',
+          shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png',
+        });
+      });
+    }
+  }, []);
+
+  if (!isMounted || !MapComponent) {
     return (
       <div 
         className={`bg-gray-100 rounded-lg flex items-center justify-center ${className}`}
@@ -51,6 +61,8 @@ export default function Map({ center, zoom = 13, markers = [], height = '400px',
       </div>
     );
   }
+
+  const { MapContainer, TileLayer, Marker, Popup } = MapComponent;
 
   return (
     <div className={`rounded-lg overflow-hidden shadow-md ${className}`} style={{ height }}>

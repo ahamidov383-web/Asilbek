@@ -4,6 +4,7 @@ import { useLanguage } from '../context/LanguageContext';
 import { places } from '../data/mock';
 import { termizPlaces, termizRoutes, termizBusStops } from '../data/termiz';
 import { Search, MapPin, Clock, DollarSign, Bus, Navigation } from 'lucide-react';
+import Map from '../components/Map';
 
 export default function Places() {
   const { t } = useLanguage();
@@ -11,17 +12,7 @@ export default function Places() {
   const [typeFilter, setTypeFilter] = useState('All');
   const [cityFilter, setCityFilter] = useState<'all' | 'termiz' | 'other'>('all');
   const [selectedPlace, setSelectedPlace] = useState<string | null>(null);
-  const [MapComponent, setMapComponent] = useState<any>(null);
   const [showRoutes, setShowRoutes] = useState(false);
-
-  // Dinamik import - faqat client-side da
-  useEffect(() => {
-    if (typeof window !== 'undefined') {
-      import('react-leaflet').then((module) => {
-        setMapComponent(() => module);
-      });
-    }
-  }, []);
 
   // Barcha joylarni birlashtirish
   const allPlaces = [...places, ...termizPlaces];
@@ -227,52 +218,19 @@ export default function Places() {
 
           {/* Map */}
           <div className="lg:sticky lg:top-24 h-[500px] lg:h-[calc(100vh-200px)] rounded-2xl overflow-hidden shadow-sm border border-gray-200">
-            {MapComponent ? (
-              <MapComponent.MapContainer
-                center={[41.11, 66.83]}
-                zoom={13}
-                style={{ height: '100%', width: '100%' }}
-                scrollWheelZoom={true}
-              >
-                <MapComponent.TileLayer
-                  attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-                  url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                />
-                {filtered.map((place) => (
-                  <MapComponent.Marker
-                    key={place.id}
-                    position={[place.latitude, place.longitude]}
-                    eventHandlers={{
-                      click: () => setSelectedPlace(place.id),
-                    }}
-                  >
-                    <MapComponent.Popup>
-                      <div className="p-2">
-                        {place.image && (
-                          <img
-                            src={place.image}
-                            alt={place.name}
-                            className="w-full h-24 object-cover rounded mb-2"
-                          />
-                        )}
-                        <strong className="text-sm">{place.name}</strong>
-                        <br />
-                        <span className="text-xs text-gray-600">{place.type}</span>
-                        <br />
-                        <span className="text-xs font-medium">{place.ticketPrice}</span>
-                      </div>
-                    </MapComponent.Popup>
-                  </MapComponent.Marker>
-                ))}
-              </MapComponent.MapContainer>
-            ) : (
-              <div className="text-center text-gray-500 h-full flex items-center justify-center">
-                <div>
-                  <div className="w-12 h-12 border-4 border-blue-200 border-t-blue-600 rounded-full animate-spin mx-auto mb-2" />
-                  <p>Xarita yuklanmoqda...</p>
-                </div>
-              </div>
-            )}
+            <Map
+              center={[41.11, 66.83]}
+              zoom={13}
+              height="100%"
+              markers={filtered.map((place) => ({
+                id: place.id,
+                position: [place.latitude, place.longitude] as [number, number],
+                title: place.name,
+                description: `${place.type} - ${place.ticketPrice}`,
+                image: place.image && place.image.startsWith('http') ? place.image : undefined,
+                onClick: () => setSelectedPlace(place.id),
+              }))}
+            />
           </div>
         </div>
 
