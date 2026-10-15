@@ -1,13 +1,17 @@
 import React, { useState } from 'react';
 import { useLanguage } from '../context/LanguageContext';
+import { useAuth } from '../context/AuthContext';
+import { useRequests } from '../context/RequestContext';
 import { Send, CheckCircle, Calendar, DollarSign, Heart, MapPin } from 'lucide-react';
 
 export default function RequestTour() {
   const { t } = useLanguage();
+  const { user, isAuthenticated } = useAuth();
+  const { createRequest } = useRequests();
   const [submitted, setSubmitted] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+  const [error, setError] = useState('');
   const [form, setForm] = useState({
-    name: '',
-    email: '',
     budget: '',
     interests: '',
     startDate: '',
@@ -15,12 +19,60 @@ export default function RequestTour() {
     notes: '',
   });
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setSubmitted(true);
+    setError('');
+    setSubmitting(true);
+
+    const result = await createRequest({
+      budget: form.budget ? Number(form.budget) : undefined,
+      interests: form.interests,
+      startDate: form.startDate,
+      endDate: form.endDate,
+      notes: form.notes,
+    });
+
+    setSubmitting(false);
+
+    if (result.success) {
+      setSubmitted(true);
+    } else {
+      setError(result.error || 'Xatolik yuz berdi');
+    }
   };
 
-  const interestSuggestions = ['History', 'Architecture', 'Food', 'Nature', 'Adventure', 'Photography', 'Shopping', 'Culture', 'Music', 'Crafts'];
+  const interestSuggestions = ['Tarix', 'Me\'morchilik', 'Ovqat', 'Tabiat', 'Sarguzasht', 'Foto', 'Xarid', 'Madaniyat', 'Musiqa', 'Hunarmandchilik'];
+
+  // Autentifikatsiya tekshiruvi
+  if (!isAuthenticated) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center px-4">
+        <div className="bg-white rounded-2xl p-12 text-center shadow-sm max-w-md w-full">
+          <div className="text-6xl mb-4">🔒</div>
+          <h2 className="text-2xl font-bold text-gray-900 mb-3">Tizimga kiring</h2>
+          <p className="text-gray-500 mb-6">So'rov yuborish uchun avval tizimga kirishingiz kerak</p>
+          <a
+            href="/login"
+            className="inline-block px-6 py-3 bg-blue-600 text-white rounded-xl font-medium hover:bg-blue-700 transition-colors"
+          >
+            Kirish
+          </a>
+        </div>
+      </div>
+    );
+  }
+
+  if (user?.role !== 'TOURIST') {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center px-4">
+        <div className="bg-white rounded-2xl p-12 text-center shadow-sm max-w-md w-full">
+          <div className="text-6xl mb-4">🚫</div>
+          <h2 className="text-2xl font-bold text-gray-900 mb-3">Ruxsat yo'q</h2>
+          <p className="text-gray-500">Faqat turistlar so'rov yuborishi mumkin</p>
+        </div>
+      </div>
+    );
+  }
 
   if (submitted) {
     return (
@@ -29,14 +81,22 @@ export default function RequestTour() {
           <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
             <CheckCircle size={40} className="text-green-500" />
           </div>
-          <h2 className="text-2xl font-bold text-gray-900 mb-3">Request Submitted!</h2>
-          <p className="text-gray-500 mb-8">{t('request.success')}</p>
-          <button
-            onClick={() => { setSubmitted(false); setForm({ name: '', email: '', budget: '', interests: '', startDate: '', endDate: '', notes: '' }); }}
-            className="px-6 py-3 bg-blue-600 text-white rounded-xl font-medium hover:bg-blue-700 transition-colors"
-          >
-            Submit Another Request
-          </button>
+          <h2 className="text-2xl font-bold text-gray-900 mb-3">So'rov yuborildi!</h2>
+          <p className="text-gray-500 mb-6">{t('request.success')}</p>
+          <div className="flex gap-3">
+            <a
+              href="/requests"
+              className="flex-1 px-6 py-3 bg-blue-600 text-white rounded-xl font-medium hover:bg-blue-700 transition-colors"
+            >
+              So'rovlarimni ko'rish
+            </a>
+            <button
+              onClick={() => { setSubmitted(false); setForm({ budget: '', interests: '', startDate: '', endDate: '', notes: '' }); }}
+              className="flex-1 px-6 py-3 border border-gray-300 text-gray-700 rounded-xl font-medium hover:bg-gray-50 transition-colors"
+            >
+              Yangi so'rov
+            </button>
+          </div>
         </div>
       </div>
     );
@@ -54,30 +114,11 @@ export default function RequestTour() {
 
       <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <form onSubmit={handleSubmit} className="bg-white rounded-2xl p-8 shadow-sm border border-gray-100">
-          {/* Name & Email */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Full Name</label>
-              <input
-                type="text"
-                required
-                value={form.name}
-                onChange={(e) => setForm({ ...form, name: e.target.value })}
-                className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent"
-                placeholder="Your name"
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Email</label>
-              <input
-                type="email"
-                required
-                value={form.email}
-                onChange={(e) => setForm({ ...form, email: e.target.value })}
-                className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent"
-                placeholder="your@email.com"
-              />
-            </div>
+          {/* User Info */}
+          <div className="bg-blue-50 rounded-xl p-4 mb-6">
+            <p className="text-sm text-gray-700">
+              <span className="font-medium">Sayyoh:</span> {user?.name} ({user?.email})
+            </p>
           </div>
 
           {/* Budget */}
@@ -174,13 +215,30 @@ export default function RequestTour() {
             />
           </div>
 
+          {/* Error */}
+          {error && (
+            <div className="bg-red-50 border border-red-200 rounded-xl p-4 mb-6">
+              <p className="text-red-600 text-sm">{error}</p>
+            </div>
+          )}
+
           {/* Submit */}
           <button
             type="submit"
-            className="w-full py-4 bg-gradient-to-r from-purple-600 to-indigo-600 text-white rounded-xl font-semibold hover:from-purple-700 hover:to-indigo-700 transition-all flex items-center justify-center gap-2 shadow-lg"
+            disabled={submitting}
+            className="w-full py-4 bg-gradient-to-r from-purple-600 to-indigo-600 text-white rounded-xl font-semibold hover:from-purple-700 hover:to-indigo-700 transition-all flex items-center justify-center gap-2 shadow-lg disabled:opacity-50"
           >
-            <Send size={18} />
-            {t('request.submit')}
+            {submitting ? (
+              <>
+                <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                Yuborilmoqda...
+              </>
+            ) : (
+              <>
+                <Send size={18} />
+                {t('request.submit')}
+              </>
+            )}
           </button>
         </form>
       </div>
