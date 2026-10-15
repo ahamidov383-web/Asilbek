@@ -22,6 +22,7 @@ import Agencies from './pages/Agencies';
 import AgencyProfile from './pages/AgencyProfile';
 import Tours from './pages/Tours';
 import Places from './pages/Places';
+import PlaceDetail from './pages/PlaceDetail';
 import Restaurants from './pages/Restaurants';
 import RequestTour from './pages/RequestTour';
 import Requests from './pages/Requests';
@@ -74,9 +75,9 @@ function App() {
                 <Route path="/agencies" element={<Agencies />} />
                 <Route path="/agencies/:id" element={<AgencyProfile />} />
                 <Route path="/tours" element={<Tours />} />
-                <Route path="/places" element={<Places />} />
-                <Route path="/restaurants" element={<Restaurants />} />
-                <Route path="/request" element={<RequestTour />} />
+              <Route path="/places" element={<Places />} />
+              <Route path="/places/:id" element={<PlaceDetail />} />
+              <Route path="/restaurants" element={<Restaurants />} />                <Route path="/request" element={<RequestTour />} />
                 <Route path="/requests" element={<Requests />} />
               </Route>
 

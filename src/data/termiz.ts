@@ -2,7 +2,7 @@ import { Place, Restaurant, TransportRoute, BusStop, Agency } from '../types';
 
 // ============================================
 // TERMIZ SHAHRI MA'LUMOTLARI
-// Yandex Maps va mahalliy turizm tahlili asosida
+// Haqiqiy rasmlar va dinamik ma'lumotlar
 // ============================================
 
 // Diqqatga sazovor joylar
@@ -16,7 +16,7 @@ export const termizPlaces: Place[] = [
     workHours: '09:00 - 18:00 (Dushanba - Yakshanba)',
     latitude: 41.0850,
     longitude: 66.8500,
-    image: '🏛️',
+    image: 'https://image.qwenlm.ai/generated-images/aca6416f-8752-4dff-b344-a2543c04e61a/_result.png',
     ticketPrice: '20,000 so\'m',
   },
   {
@@ -28,7 +28,7 @@ export const termizPlaces: Place[] = [
     workHours: '09:00 - 17:00 (Dushanba - Shanba)',
     latitude: 41.1000,
     longitude: 66.8200,
-    image: '🏺',
+    image: 'https://image.qwenlm.ai/generated-images/cc6210b4-05b4-4a61-8e73-1c4d0fcbee3e/_result.png',
     ticketPrice: '15,000 so\'m',
   },
   {
@@ -40,7 +40,7 @@ export const termizPlaces: Place[] = [
     workHours: '09:00 - 17:00 (Dushanba - Juma), 10:00 - 15:00 (Shanba)',
     latitude: 41.1100,
     longitude: 66.8300,
-    image: '🏛️',
+    image: 'https://image.qwenlm.ai/generated-images/525e0328-c744-4d17-a0ea-0107026e4c1d/_result.png',
     ticketPrice: '25,000 so\'m',
   },
   {
@@ -52,7 +52,7 @@ export const termizPlaces: Place[] = [
     workHours: '08:00 - 20:00 (Har kuni)',
     latitude: 41.1150,
     longitude: 66.8350,
-    image: '🕌',
+    image: 'https://image.qwenlm.ai/generated-images/5b8a99e5-fdb0-4e97-81f5-5ee61bdfe2f6/_result.png',
     ticketPrice: 'Bepul',
   },
   {
@@ -64,7 +64,7 @@ export const termizPlaces: Place[] = [
     workHours: '08:00 - 18:00 (Har kuni)',
     latitude: 41.0500,
     longitude: 66.8000,
-    image: '🏰',
+    image: 'https://image.qwenlm.ai/generated-images/8ab8db93-5221-4cdd-b179-af3d685b512e/_result.png',
     ticketPrice: '10,000 so\'m',
   },
 ];
@@ -137,7 +137,7 @@ export const termizRestaurants: Restaurant[] = [
     avgPrice: 20000,
     latitude: 41.1110,
     longitude: 66.8290,
-    image: '🍚',
+    image: 'https://image.qwenlm.ai/generated-images/0e95b7b3-9308-46e0-a10d-fdb1decd2cfc/_result.png',
     address: 'Termiz sh., Amir Temur ko\'chasi, 15-uy',
     rating: 4.5,
     menuItems: [
@@ -154,7 +154,7 @@ export const termizRestaurants: Restaurant[] = [
     avgPrice: 30000,
     latitude: 41.1090,
     longitude: 66.8310,
-    image: '🍜',
+    image: 'https://image.qwenlm.ai/generated-images/63cae97e-05aa-4fd1-aa12-8060b2b5e41a/_result.png',
     address: 'Termiz sh., Mustaqillik ko\'chasi, 42-uy',
     rating: 4.7,
     menuItems: [
@@ -172,7 +172,7 @@ export const termizRestaurants: Restaurant[] = [
     avgPrice: 45000,
     latitude: 41.1130,
     longitude: 66.8340,
-    image: '🥩',
+    image: 'https://image.qwenlm.ai/generated-images/e46bcdd0-0061-44b7-ab50-cccd2493b70b/_result.png',
     address: 'Termiz sh., Navoiy ko\'chasi, 8-uy',
     rating: 4.8,
     menuItems: [
@@ -190,7 +190,7 @@ export const termizRestaurants: Restaurant[] = [
     avgPrice: 18000,
     latitude: 41.1070,
     longitude: 66.8270,
-    image: '🫓',
+    image: 'https://image.qwenlm.ai/generated-images/dbb9d5fe-8596-415c-a46f-bae872508bd7/_result.png',
     address: 'Termiz sh., Bobur ko\'chasi, 25-uy',
     rating: 4.6,
     menuItems: [
@@ -285,3 +285,22 @@ export const priceIndicators = {
   currency: 'UZS (O\'zbek so\'mi)',
   exchange_rate: '1 USD ≈ 12,500 UZS (2026)',
 };
+
+// Dinamik sana yaratish helper
+export function getDynamicDates() {
+  const now = new Date();
+  const futureDate = new Date(now.getTime() + 30 * 24 * 60 * 60 * 1000); // 30 kun keyin
+  
+  return {
+    today: now.toISOString().split('T')[0],
+    nextMonth: futureDate.toISOString().split('T')[0],
+    formatDate: (date: Date | string) => {
+      const d = typeof date === 'string' ? new Date(date) : date;
+      return d.toLocaleDateString('uz-UZ', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+      });
+    },
+  };
+}

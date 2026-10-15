@@ -177,8 +177,18 @@ export default function Restaurants() {
                   : 'border-transparent hover:border-gray-200 hover:shadow-md'
               }`}
             >
-              <div className="h-36 bg-gradient-to-br from-red-50 to-orange-50 flex items-center justify-center text-5xl relative">
-                {rest.image}
+              <div className="h-36 relative overflow-hidden">
+                {rest.image && rest.image.startsWith('http') ? (
+                  <img
+                    src={rest.image}
+                    alt={rest.name}
+                    className="w-full h-full object-cover"
+                  />
+                ) : (
+                  <div className="w-full h-full bg-gradient-to-br from-red-50 to-orange-50 flex items-center justify-center text-5xl">
+                    {rest.image || '🍽️'}
+                  </div>
+                )}
                 <div className="absolute top-3 right-3 bg-white/90 backdrop-blur-sm rounded-full px-2 py-1 flex items-center gap-1">
                   <Star size={12} className="text-amber-400 fill-amber-400" />
                   <span className="text-xs font-medium text-gray-700">{rest.rating}</span>

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import { useLanguage } from '../context/LanguageContext';
 import { places } from '../data/mock';
 import { termizPlaces, termizRoutes, termizBusStops } from '../data/termiz';
@@ -182,9 +183,17 @@ export default function Places() {
                 }`}
               >
                 <div className="flex items-start gap-4">
-                  <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-amber-50 to-orange-50 flex items-center justify-center text-3xl flex-shrink-0">
-                    {place.image}
-                  </div>
+                  {place.image && place.image.startsWith('http') ? (
+                    <img
+                      src={place.image}
+                      alt={place.name}
+                      className="w-20 h-20 rounded-xl object-cover flex-shrink-0"
+                    />
+                  ) : (
+                    <div className="w-20 h-20 rounded-xl bg-gradient-to-br from-amber-50 to-orange-50 flex items-center justify-center text-3xl flex-shrink-0">
+                      {place.image || '📍'}
+                    </div>
+                  )}
                   <div className="flex-1">
                     <div className="flex items-center gap-2 mb-1">
                       <h3 className="font-semibold text-gray-900">{place.name}</h3>
@@ -203,6 +212,13 @@ export default function Places() {
                         {place.ticketPrice}
                       </span>
                     </div>
+                    <Link
+                      to={`/places/${place.id}`}
+                      className="inline-block mt-3 text-sm text-blue-600 hover:text-blue-700 font-medium"
+                      onClick={(e: React.MouseEvent) => e.stopPropagation()}
+                    >
+                      Batafsil ko'rish →
+                    </Link>
                   </div>
                 </div>
               </div>
@@ -210,11 +226,11 @@ export default function Places() {
           </div>
 
           {/* Map */}
-          <div className="lg:sticky lg:top-24 h-[500px] lg:h-[calc(100vh-200px)] rounded-2xl overflow-hidden shadow-sm border border-gray-200 bg-gray-100 flex items-center justify-center">
+          <div className="lg:sticky lg:top-24 h-[500px] lg:h-[calc(100vh-200px)] rounded-2xl overflow-hidden shadow-sm border border-gray-200">
             {MapComponent ? (
               <MapComponent.MapContainer
-                center={[39.6542, 66.9758]}
-                zoom={6}
+                center={[41.11, 66.83]}
+                zoom={13}
                 style={{ height: '100%', width: '100%' }}
                 scrollWheelZoom={true}
               >
@@ -231,21 +247,30 @@ export default function Places() {
                     }}
                   >
                     <MapComponent.Popup>
-                      <div className="text-sm">
-                        <strong>{place.name}</strong>
+                      <div className="p-2">
+                        {place.image && (
+                          <img
+                            src={place.image}
+                            alt={place.name}
+                            className="w-full h-24 object-cover rounded mb-2"
+                          />
+                        )}
+                        <strong className="text-sm">{place.name}</strong>
                         <br />
-                        {place.type}
+                        <span className="text-xs text-gray-600">{place.type}</span>
                         <br />
-                        {place.ticketPrice}
+                        <span className="text-xs font-medium">{place.ticketPrice}</span>
                       </div>
                     </MapComponent.Popup>
                   </MapComponent.Marker>
                 ))}
               </MapComponent.MapContainer>
             ) : (
-              <div className="text-center text-gray-500">
-                <div className="text-4xl mb-2">🗺️</div>
-                <p>Xarita yuklanmoqda...</p>
+              <div className="text-center text-gray-500 h-full flex items-center justify-center">
+                <div>
+                  <div className="w-12 h-12 border-4 border-blue-200 border-t-blue-600 rounded-full animate-spin mx-auto mb-2" />
+                  <p>Xarita yuklanmoqda...</p>
+                </div>
               </div>
             )}
           </div>
