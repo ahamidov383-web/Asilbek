@@ -291,7 +291,7 @@ export default function AgencyProfile() {
                           <Star
                             key={star}
                             size={18}
-                            className={star <= Math.round(agency.rating) ? 'text-amber-400 fill-amber-400' : 'text-gray-200'}
+                            className={star <= Math.round(agency.rating || 0) ? 'text-amber-400 fill-amber-400' : 'text-gray-200'}
                           />
                         ))}
                       </div>

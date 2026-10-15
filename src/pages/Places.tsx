@@ -28,7 +28,7 @@ export default function Places() {
 
   const filtered = allPlaces.filter((place) => {
     const matchSearch = place.name.toLowerCase().includes(search.toLowerCase()) ||
-      place.description.toLowerCase().includes(search.toLowerCase());
+      (place.description || '').toLowerCase().includes(search.toLowerCase());
     const matchType = typeFilter === 'All' || place.type === typeFilter;
     const matchCity = cityFilter === 'all' || 
       (cityFilter === 'termiz' && termizPlaces.some(p => p.id === place.id)) ||

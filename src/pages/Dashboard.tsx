@@ -24,7 +24,7 @@ export default function Dashboard() {
       if (r.id === requestId) {
         return {
           ...r,
-          offers: [...r.offers, {
+          offers: [...(r.offers || []), {
             id: `o${Date.now()}`,
             requestId,
             agencyId: '1',
@@ -216,10 +216,10 @@ export default function Dashboard() {
                 </div>
 
                 {/* Existing Offers */}
-                {req.offers.length > 0 && (
+                {(req.offers || []).length > 0 && (
                   <div className="mb-4 space-y-2">
                     <span className="text-sm font-medium text-gray-700">Offers received:</span>
-                    {req.offers.map((offer) => (
+                    {(req.offers || []).map((offer) => (
                       <div key={offer.id} className="bg-gray-50 rounded-xl p-3 flex items-center justify-between">
                         <div>
                           <span className="text-sm font-medium">{offer.agencyName}</span>
@@ -273,7 +273,7 @@ export default function Dashboard() {
         {/* Offers Tab */}
         {activeTab === 'offers' && (
           <div className="space-y-4">
-            {localRequests.flatMap(r => r.offers.map(o => ({ ...o, request: r }))).map((offer) => (
+            {localRequests.flatMap(r => (r.offers || []).map(o => ({ ...o, request: r }))).map((offer) => (
               <div key={offer.id} className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
                 <div className="flex items-center justify-between mb-3">
                   <div>

@@ -11,7 +11,7 @@ export default function Agencies() {
 
   const filtered = agencies.filter((a) => {
     const matchSearch = a.name.toLowerCase().includes(search.toLowerCase()) ||
-      a.description.toLowerCase().includes(search.toLowerCase());
+      (a.description || '').toLowerCase().includes(search.toLowerCase());
     const matchVerified = !filterVerified || a.isVerified;
     return matchSearch && matchVerified;
   });
