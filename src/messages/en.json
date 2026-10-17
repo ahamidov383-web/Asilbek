@@ -1,0 +1,55 @@
+{
+  "home": {
+    "title": "Travel across Uzbekistan",
+    "explorePlaces": "Explore Places",
+    "findRestaurants": "Find Restaurants",
+    "browseTours": "Browse Tours",
+    "hero": {
+      "title": "Journey along the Great Silk Road",
+      "subtitle": "Discover ancient cities"
+    }
+  },
+  "places": {
+    "title": "Places of Interest",
+    "howToGet": "How to Get There",
+    "workHours": "Working Hours",
+    "ticketPrice": "Ticket Price",
+    "search": "Search places...",
+    "allTypes": "All Types"
+  },
+  "restaurants": {
+    "title": "Restaurants",
+    "searchFood": "Search by food type...",
+    "avgPrice": "Average Price",
+    "perPerson": "per person",
+    "menu": "Menu"
+  },
+  "tours": {
+    "title": "Tours",
+    "seats": "seats left",
+    "book": "Book Now",
+    "details": "View Details"
+  },
+  "agencies": {
+    "title": "Agencies",
+    "verified": "Verified",
+    "tours": "tours",
+    "reviews": "reviews",
+    "viewProfile": "View Profile"
+  },
+  "footer": {
+    "about": "About Us",
+    "contact": "Contact",
+    "privacy": "Privacy Policy",
+    "terms": "Terms of Service",
+    "copyright": "© 2026 Visit Uzbekistan. All rights reserved."
+  },
+  "common": {
+    "loading": "Loading...",
+    "error": "An error occurred",
+    "back": "Back",
+    "save": "Save",
+    "cancel": "Cancel",
+    "close": "Close"
+  }
+}

@@ -1,0 +1,55 @@
+{
+  "home": {
+    "title": "O'zbekiston bo'ylab sayohat",
+    "explorePlaces": "Obyektlarni ko'rish",
+    "findRestaurants": "Restoran topish",
+    "browseTours": "Turlarni ko'rish",
+    "hero": {
+      "title": "Buyuk Ipak Yo'li bo'ylab sayohat",
+      "subtitle": "Qadimiy shaharlarni kashf eting"
+    }
+  },
+  "places": {
+    "title": "Diqqatga sazovor joylar",
+    "howToGet": "Qanday borish mumkin",
+    "workHours": "Ish vaqti",
+    "ticketPrice": "Chipta narxi",
+    "search": "Joylarni qidirish...",
+    "allTypes": "Barcha turlar"
+  },
+  "restaurants": {
+    "title": "Restoranlar",
+    "searchFood": "Taom turini qidirish...",
+    "avgPrice": "O'rtacha narx",
+    "perPerson": "bir kishi uchun",
+    "menu": "Menyu"
+  },
+  "tours": {
+    "title": "Turlar",
+    "seats": "joy qoldi",
+    "book": "Band qilish",
+    "details": "Batafsil"
+  },
+  "agencies": {
+    "title": "Agentliklar",
+    "verified": "Tasdiqlangan",
+    "tours": "turlar",
+    "reviews": "sharhlar",
+    "viewProfile": "Profilni ko'rish"
+  },
+  "footer": {
+    "about": "Biz haqimizda",
+    "contact": "Aloqa",
+    "privacy": "Maxfiylik siyosati",
+    "terms": "Foydalanish shartlari",
+    "copyright": "© 2026 Visit Uzbekistan. Barcha huquqlar himoyalangan."
+  },
+  "common": {
+    "loading": "Yuklanmoqda...",
+    "error": "Xatolik yuz berdi",
+    "back": "Orqaga",
+    "save": "Saqlash",
+    "cancel": "Bekor qilish",
+    "close": "Yopish"
+  }
+}
