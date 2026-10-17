@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
-import { termizPlaces, termizRoutes } from '../data/termiz';
+import { termizPlaces, termizRoutes, termizBusStops } from '../data/termiz';
 import { Place } from '../types';
 import { ArrowLeft, MapPin, Clock, DollarSign, Bus, Navigation, Calendar } from 'lucide-react';
 import Map from '../components/Map';
+import FindMyLocation, { findNearestBusStop } from '../components/FindMyLocation';
 
 export default function PlaceDetail() {
   const { id } = useParams<{ id: string }>();
@@ -11,6 +12,8 @@ export default function PlaceDetail() {
   const [place, setPlace] = useState<Place | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [userLocation, setUserLocation] = useState<[number, number] | null>(null);
+  const [nearestStop, setNearestStop] = useState<{ stop: any; distance: number } | null>(null);
 
   useEffect(() => {
     // Simulate API call
@@ -70,8 +73,9 @@ export default function PlaceDetail() {
       id: place.id,
       position: [place.latitude, place.longitude] as [number, number],
       title: place.name,
+      type: 'destination' as const,
       description: place.type,
-      image: place.image,
+      link: `/places/${place.id}`,
     },
   ];
 
@@ -174,11 +178,44 @@ export default function PlaceDetail() {
                 <Navigation className="w-6 h-6 text-green-600" />
                 Xaritada joylashuv
               </h2>
+              
+              {/* Find My Location Button */}
+              <div className="mb-4">
+                <FindMyLocation
+                  onLocationFound={(location) => {
+                    setUserLocation(location);
+                    // Eng yaqin avtobus bekatini topish
+                    const nearest = findNearestBusStop(
+                      location[0],
+                      location[1],
+                      termizBusStops
+                    );
+                    setNearestStop(nearest);
+                  }}
+                />
+              </div>
+
+              {/* Nearest Bus Stop Info */}
+              {nearestStop && (
+                <div className="mb-4 p-4 bg-blue-50 border border-blue-200 rounded-lg">
+                  <div className="flex items-center gap-2 mb-2">
+                    <Bus className="w-5 h-5 text-blue-600" />
+                    <h3 className="font-semibold text-blue-900">Eng yaqin avtobus bekati</h3>
+                  </div>
+                  <p className="text-blue-800 font-medium">{nearestStop.stop.name}</p>
+                  <p className="text-sm text-blue-700">
+                    Masofa: <strong>{nearestStop.distance.toFixed(2)} km</strong>
+                  </p>
+                </div>
+              )}
+
               <Map
                 center={[place.latitude, place.longitude]}
                 zoom={15}
                 markers={mapMarkers}
                 height="400px"
+                showUserLocation={!!userLocation}
+                userLocation={userLocation}
               />
               <div className="mt-4 text-sm text-gray-600">
                 <p><strong>Koordinatalar:</strong> {place.latitude.toFixed(4)}, {place.longitude.toFixed(4)}</p>

@@ -226,8 +226,9 @@ export default function Places() {
                 id: place.id,
                 position: [place.latitude, place.longitude] as [number, number],
                 title: place.name,
+                type: 'destination' as const,
                 description: `${place.type} - ${place.ticketPrice}`,
-                image: place.image && place.image.startsWith('http') ? place.image : undefined,
+                link: `/places/${place.id}`,
                 onClick: () => setSelectedPlace(place.id),
               }))}
             />
