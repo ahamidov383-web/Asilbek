@@ -29,29 +29,39 @@ enum Role {
 }
 
 model Agency {
-  id          String   @id @default(cuid())
-  name        String
-  description String?
-  logo        String?
-  isVerified  Boolean  @default(false)
-  userId      String   @unique
-  user        User     @relation(fields: [userId], references: [id])
-  tours       Tour[]
-  offers      Offer[]
+  id               String   @id @default(cuid())
+  // Multi-language fields
+  name_uz          String
+  name_ru          String
+  name_en          String
+  description_uz   String?
+  description_ru   String?
+  description_en   String?
+  logo             String?
+  isVerified       Boolean  @default(false)
+  userId           String   @unique
+  user             User     @relation(fields: [userId], references: [id])
+  tours            Tour[]
+  offers           Offer[]
 }
 
 model Tour {
-  id             String   @id @default(cuid())
-  title          String
-  description    String
-  price          Float
-  availableSeats Int
-  totalSeats     Int      @default(15)
-  startDate      DateTime
-  endDate        DateTime
-  agencyId       String
-  agency         Agency   @relation(fields: [agencyId], references: [id])
-  requests       Request[]
+  id               String   @id @default(cuid())
+  // Multi-language fields
+  title_uz         String
+  title_ru         String
+  title_en         String
+  description_uz   String
+  description_ru   String
+  description_en   String
+  price            Float    // Universal
+  availableSeats   Int
+  totalSeats       Int      @default(15)
+  startDate        DateTime
+  endDate          DateTime
+  agencyId         String
+  agency           Agency   @relation(fields: [agencyId], references: [id])
+  requests         Request[]
 }
 
 model Request {
@@ -92,35 +102,52 @@ enum OfferStatus {
 }
 
 model Place {
-  id          String   @id @default(cuid())
-  name        String
-  type        String
-  howToGet    String
-  workHours   String
-  latitude    Float
-  longitude   Float
-  description String?
-  ticketPrice String?
+  id              String   @id @default(cuid())
+  // Multi-language fields
+  name_uz         String
+  name_ru         String
+  name_en         String
+  description_uz  String?
+  description_ru  String?
+  description_en  String?
+  howToGet_uz     String?
+  howToGet_ru     String?
+  howToGet_en     String?
+  type            String   // Universal (tarjima qilinmaydi)
+  workHours       String   // Universal
+  latitude        Float
+  longitude       Float
+  ticketPrice     String?
 }
 
 model Restaurant {
-  id          String     @id @default(cuid())
-  name        String
-  cuisineType String[]
-  avgPrice    Float
-  latitude    Float
-  longitude   Float
-  address     String?
-  menuItems   MenuItem[]
+  id              String     @id @default(cuid())
+  // Multi-language fields
+  name_uz         String
+  name_ru         String
+  name_en         String
+  address_uz      String?
+  address_ru      String?
+  address_en      String?
+  cuisineType     String[]   // Universal (tarjima qilinmaydi)
+  avgPrice        Float      // Universal
+  latitude        Float
+  longitude       Float
+  menuItems       MenuItem[]
 }
 
 model MenuItem {
-  id           String     @id @default(cuid())
-  name         String
-  price        Float
-  description  String?
-  restaurantId String
-  restaurant   Restaurant @relation(fields: [restaurantId], references: [id])
+  id              String     @id @default(cuid())
+  // Multi-language fields
+  name_uz         String
+  name_ru         String
+  name_en         String
+  description_uz  String?
+  description_ru  String?
+  description_en  String?
+  price           Float      // Universal
+  restaurantId    String
+  restaurant      Restaurant @relation(fields: [restaurantId], references: [id])
 }
 
 // Transport Routes (Yangi qo'shilgan)

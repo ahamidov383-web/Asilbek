@@ -100,15 +100,26 @@ export interface Offer {
 
 export interface Place {
   id: string;
-  name: string;
-  type: string;
-  howToGet: string;
-  workHours: string;
+  // Multi-language fields
+  name_uz: string;
+  name_ru: string;
+  name_en: string;
+  description_uz?: string | null;
+  description_ru?: string | null;
+  description_en?: string | null;
+  howToGet_uz?: string | null;
+  howToGet_ru?: string | null;
+  howToGet_en?: string | null;
+  type: string; // Universal
+  workHours: string; // Universal
   latitude: number;
   longitude: number;
-  description: string | null;
   image?: string;
   ticketPrice?: string;
+  // Backward compatibility (deprecated - use name_uz instead)
+  name?: string;
+  description?: string | null;
+  howToGet?: string | null;
 }
 
 export interface Restaurant {

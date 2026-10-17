@@ -11,6 +11,8 @@ import Map from '../components/Map';
 import FindMyLocation, { findNearestBusStop, calculateDistance } from '../components/FindMyLocation';
 import ImageGallery from '../components/ImageGallery';
 import { cn } from '../lib/utils';
+import { getPlaceTranslation } from '../lib/i18n';
+import { useLanguage } from '../context/LanguageContext';
 
 // Rasm galereyasi uchun rasmlar (har bir joy uchun)
 const placeImages: Record<string, string[]> = {
@@ -49,6 +51,7 @@ const ticketPrices: Record<string, { local: number; foreign: number }> = {
 export default function PlaceDetail() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
+  const { language } = useLanguage();
   const [place, setPlace] = useState<Place | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -57,6 +60,9 @@ export default function PlaceDetail() {
   const [isFavorite, setIsFavorite] = useState(false);
   const [showShareMenu, setShowShareMenu] = useState(false);
   const [copied, setCopied] = useState(false);
+
+  // Tarjima olish
+  const translation = place ? getPlaceTranslation(place, language) : null;
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -167,7 +173,7 @@ export default function PlaceDetail() {
     {
       id: place.id,
       position: [place.latitude, place.longitude] as [number, number],
-      title: place.name,
+      title: translation?.name || place.name_uz,
       type: 'destination' as const,
       description: place.type,
     },
@@ -202,7 +208,7 @@ export default function PlaceDetail() {
           {/* Main Content */}
           <div className="lg:col-span-2 space-y-6">
             {/* Image Gallery */}
-            <ImageGallery images={images} title={place.name} />
+            <ImageGallery images={images} title={translation?.name || ''} />
 
             {/* Title & Actions */}
             <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">

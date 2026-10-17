@@ -5,6 +5,7 @@ import { places } from '../data/mock';
 import { termizPlaces, termizRoutes, termizBusStops } from '../data/termiz';
 import { Search, MapPin, Clock, DollarSign, Bus, Navigation } from 'lucide-react';
 import Map from '../components/Map';
+import { getPlaceTranslation } from '../lib/i18n';
 
 export default function Places() {
   const { t } = useLanguage();
@@ -18,9 +19,12 @@ export default function Places() {
   const allPlaces = [...places, ...termizPlaces];
   const types = ['All', ...Array.from(new Set(allPlaces.map(p => p.type)))];
 
+  const { language } = useLanguage();
+
   const filtered = allPlaces.filter((place) => {
-    const matchSearch = place.name.toLowerCase().includes(search.toLowerCase()) ||
-      (place.description || '').toLowerCase().includes(search.toLowerCase());
+    const translation = getPlaceTranslation(place, language);
+    const matchSearch = translation.name.toLowerCase().includes(search.toLowerCase()) ||
+      (translation.description || '').toLowerCase().includes(search.toLowerCase());
     const matchType = typeFilter === 'All' || place.type === typeFilter;
     const matchCity = cityFilter === 'all' || 
       (cityFilter === 'termiz' && termizPlaces.some(p => p.id === place.id)) ||
@@ -222,15 +226,18 @@ export default function Places() {
               center={[41.11, 66.83]}
               zoom={13}
               height="100%"
-              markers={filtered.map((place) => ({
-                id: place.id,
-                position: [place.latitude, place.longitude] as [number, number],
-                title: place.name,
-                type: 'destination' as const,
-                description: `${place.type} - ${place.ticketPrice}`,
-                link: `/places/${place.id}`,
-                onClick: () => setSelectedPlace(place.id),
-              }))}
+              markers={filtered.map((place) => {
+                const translation = getPlaceTranslation(place, language);
+                return {
+                  id: place.id,
+                  position: [place.latitude, place.longitude] as [number, number],
+                  title: translation.name,
+                  type: 'destination' as const,
+                  description: `${place.type} - ${place.ticketPrice}`,
+                  link: `/places/${place.id}`,
+                  onClick: () => setSelectedPlace(place.id),
+                };
+              })}
             />
           </div>
         </div>
