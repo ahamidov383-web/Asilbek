@@ -1,4 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
+import { MapContainer, TileLayer, Marker, Popup, Polyline } from 'react-leaflet';
+import L from 'leaflet';
+import 'leaflet/dist/leaflet.css';
 
 // Marker turlari
 export type MarkerType = 'destination' | 'bus_stop' | 'user_location' | 'restaurant';
@@ -34,19 +37,29 @@ interface MapProps {
 
 // Marker ranglari
 const markerColors: Record<MarkerType, string> = {
-  destination: '#ef4444', // Red
-  bus_stop: '#3b82f6', // Blue
-  user_location: '#10b981', // Green
-  restaurant: '#f59e0b', // Orange
+  destination: '#ef4444',
+  bus_stop: '#3b82f6',
+  user_location: '#10b981',
+  restaurant: '#f59e0b',
 };
 
-// Marker ikonkalari (emoji)
+// Marker ikonkalari
 const markerIcons: Record<MarkerType, string> = {
   destination: '📍',
   bus_stop: '🚏',
   user_location: '📍',
   restaurant: '🍽️',
 };
+
+// Leaflet icon fix
+if (typeof window !== 'undefined') {
+  delete (L.Icon.Default.prototype as any)._getIconUrl;
+  L.Icon.Default.mergeOptions({
+    iconRetinaUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon-2x.png',
+    iconUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon.png',
+    shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png',
+  });
+}
 
 export default function Map({
   center,
@@ -58,54 +71,10 @@ export default function Map({
   showUserLocation = false,
   userLocation = null,
 }: MapProps) {
-  const [MapComponent, setMapComponent] = useState<any>(null);
-  const [isMounted, setIsMounted] = useState(false);
-  const [L, setL] = useState<any>(null);
-
-  // Dynamic import - faqat client-side da yuklanadi
-  useEffect(() => {
-    setIsMounted(true);
-
-    // Leaflet ni dynamic import qilish
-    import('leaflet').then((leafletModule) => {
-      const leaflet = leafletModule.default;
-      setL(leaflet);
-
-      // Fix default marker icons
-      delete (leaflet.Icon.Default.prototype as any)._getIconUrl;
-      leaflet.Icon.Default.mergeOptions({
-        iconRetinaUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon-2x.png',
-        iconUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon.png',
-        shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png',
-      });
-    });
-
-    // react-leaflet ni dynamic import qilish
-    import('react-leaflet').then((module) => {
-      setMapComponent(() => module);
-    }).catch((err) => {
-      console.error('react-leaflet import failed:', err);
-    });
-  }, []);
-
-  if (!isMounted || !MapComponent || !L) {
-    return (
-      <div
-        className={`bg-gray-100 rounded-lg flex items-center justify-center ${className}`}
-        style={{ height }}
-      >
-        <div className="text-center">
-          <div className="w-12 h-12 border-4 border-primary border-t-transparent rounded-full animate-spin mx-auto mb-2" />
-          <p className="text-gray-600">Xarita yuklanmoqda...</p>
-        </div>
-      </div>
-    );
-  }
-
-  const { MapContainer, TileLayer, Marker, Popup, Polyline } = MapComponent;
-
   // Custom icon yaratish
   const createCustomIcon = (type: MarkerType) => {
+    if (typeof window === 'undefined') return null;
+    
     const color = markerColors[type];
     const icon = markerIcons[type];
 
@@ -133,8 +102,10 @@ export default function Map({
     });
   };
 
-  // User location icon (pulsing green dot)
+  // User location icon
   const createUserLocationIcon = () => {
+    if (typeof window === 'undefined') return null;
+    
     return L.divIcon({
       className: 'user-location-marker',
       html: `
@@ -185,50 +156,60 @@ export default function Map({
         />
 
         {/* Markers */}
-        {markers.map((marker) => (
-          <Marker
-            key={marker.id}
-            position={marker.position}
-            icon={createCustomIcon(marker.type)}
-            eventHandlers={{
-              click: marker.onClick,
-            }}
-          >
-            <Popup>
-              <div className="p-2 min-w-[200px]">
-                <h3 className="font-bold text-base mb-1">{marker.title}</h3>
-                <p className="text-xs text-gray-600 mb-2">
-                  {getMarkerTypeLabel(marker.type)}
-                </p>
-                {marker.description && (
-                  <p className="text-sm text-gray-700 mb-3">{marker.description}</p>
-                )}
-                {marker.link && (
-                  <a
-                    href={marker.link}
-                    className="inline-block px-3 py-1.5 bg-primary text-white text-sm rounded hover:bg-primary-dark transition-colors"
-                  >
-                    Batafsil →
-                  </a>
-                )}
-              </div>
-            </Popup>
-          </Marker>
-        ))}
+        {markers.map((marker) => {
+          const icon = createCustomIcon(marker.type);
+          if (!icon) return null;
+          
+          return (
+            <Marker
+              key={marker.id}
+              position={marker.position}
+              icon={icon}
+              eventHandlers={{
+                click: marker.onClick,
+              }}
+            >
+              <Popup>
+                <div className="p-2 min-w-[200px]">
+                  <h3 className="font-bold text-base mb-1">{marker.title}</h3>
+                  <p className="text-xs text-gray-600 mb-2">
+                    {getMarkerTypeLabel(marker.type)}
+                  </p>
+                  {marker.description && (
+                    <p className="text-sm text-gray-700 mb-3">{marker.description}</p>
+                  )}
+                  {marker.link && (
+                    <a
+                      href={marker.link}
+                      className="inline-block px-3 py-1.5 bg-primary text-white text-sm rounded hover:bg-primary-dark transition-colors"
+                    >
+                      Batafsil →
+                    </a>
+                  )}
+                </div>
+              </Popup>
+            </Marker>
+          );
+        })}
 
         {/* User Location */}
-        {showUserLocation && userLocation && (
-          <Marker position={userLocation} icon={createUserLocationIcon()}>
-            <Popup>
-              <div className="p-2">
-                <h3 className="font-bold text-base mb-1">Sizning joylashuvingiz</h3>
-                <p className="text-sm text-gray-600">
-                  {userLocation[0].toFixed(4)}, {userLocation[1].toFixed(4)}
-                </p>
-              </div>
-            </Popup>
-          </Marker>
-        )}
+        {showUserLocation && userLocation && (() => {
+          const icon = createUserLocationIcon();
+          if (!icon) return null;
+          
+          return (
+            <Marker position={userLocation} icon={icon}>
+              <Popup>
+                <div className="p-2">
+                  <h3 className="font-bold text-base mb-1">Sizning joylashuvingiz</h3>
+                  <p className="text-sm text-gray-600">
+                    {userLocation[0].toFixed(4)}, {userLocation[1].toFixed(4)}
+                  </p>
+                </div>
+              </Popup>
+            </Marker>
+          );
+        })()}
 
         {/* Polylines (Routes) */}
         {polylines.map((polyline) => (
