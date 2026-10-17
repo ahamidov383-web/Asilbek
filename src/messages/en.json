@@ -1,41 +1,124 @@
 {
   "home": {
     "title": "Travel across Uzbekistan",
+    "hero": "Discover the Heart of Central Asia",
+    "heroSub": "Explore ancient Silk Road cities, taste authentic cuisine, and create unforgettable memories in Uzbekistan",
+    "exploreTours": "Explore Tours",
+    "findAgencies": "Find Agencies",
     "explorePlaces": "Explore Places",
     "findRestaurants": "Find Restaurants",
     "browseTours": "Browse Tours",
+    "stats": {
+      "tours": "Tours Available",
+      "agencies": "Verified Agencies",
+      "places": "Historical Sites",
+      "tourists": "Happy Tourists"
+    },
+    "popularTitle": "Popular Destinations",
+    "popularSub": "Discover the most visited places in Uzbekistan",
+    "whyTitle": "Why Choose Uzbekistan?",
+    "whySub": "A land of ancient wonders and warm hospitality",
+    "features": {
+      "culture": "Rich Culture",
+      "cultureDesc": "2000+ years of history along the Silk Road",
+      "food": "Incredible Food",
+      "foodDesc": "Authentic plov, shashlik, and 1000+ dishes",
+      "safety": "Safe & Welcoming",
+      "safetyDesc": "One of the safest countries in Central Asia",
+      "value": "Great Value",
+      "valueDesc": "World-class experiences at affordable prices"
+    },
     "hero": {
       "title": "Journey along the Great Silk Road",
       "subtitle": "Discover ancient cities"
     }
   },
   "places": {
-    "title": "Places of Interest",
+    "title": "Historical Places & Attractions",
+    "subtitle": "Explore Uzbekistan's rich heritage",
     "howToGet": "How to Get There",
     "workHours": "Working Hours",
     "ticketPrice": "Ticket Price",
     "search": "Search places...",
-    "allTypes": "All Types"
+    "allTypes": "All Types",
+    "viewMap": "View on Map"
   },
   "restaurants": {
-    "title": "Restaurants",
+    "title": "Restaurants & Food",
+    "subtitle": "Taste the flavors of Uzbekistan",
     "searchFood": "Search by food type...",
     "avgPrice": "Average Price",
     "perPerson": "per person",
-    "menu": "Menu"
+    "menu": "Menu",
+    "cuisine": "Cuisine"
   },
   "tours": {
-    "title": "Tours",
+    "title": "Available Tours",
+    "subtitle": "Find your perfect adventure",
     "seats": "seats left",
     "book": "Book Now",
-    "details": "View Details"
+    "details": "View Details",
+    "filter": "Filter",
+    "priceRange": "Price Range",
+    "search": "Search tours...",
+    "full": "Fully Booked"
   },
   "agencies": {
-    "title": "Agencies",
+    "title": "Verified Travel Agencies",
+    "subtitle": "Connect with trusted local experts",
     "verified": "Verified",
     "tours": "tours",
     "reviews": "reviews",
-    "viewProfile": "View Profile"
+    "viewProfile": "View Profile",
+    "search": "Search agencies..."
+  },
+  "request": {
+    "title": "Request a Custom Tour",
+    "subtitle": "Tell us about your dream trip and agencies will send you offers",
+    "budget": "Budget (USD)",
+    "interests": "Interests",
+    "interestsPlaceholder": "e.g., History, Food, Nature, Adventure...",
+    "startDate": "Start Date",
+    "endDate": "End Date",
+    "submit": "Submit Request",
+    "success": "Your request has been submitted! Agencies will review and send offers."
+  },
+  "dashboard": {
+    "title": "Agency Dashboard",
+    "tours": "My Tours",
+    "requests": "Incoming Requests",
+    "offers": "My Offers",
+    "addTour": "Add New Tour",
+    "updateSeats": "Update Seats",
+    "sendOffer": "Send Offer",
+    "stats": {
+      "totalTours": "Total Tours",
+      "activeBookings": "Active Bookings",
+      "totalRevenue": "Total Revenue",
+      "avgRating": "Avg Rating"
+    }
+  },
+  "admin": {
+    "title": "Admin Panel",
+    "agencies": "Agency Verification",
+    "content": "Content Moderation",
+    "users": "User Management",
+    "approve": "Approve",
+    "reject": "Reject",
+    "pending": "Pending",
+    "verified": "Verified"
+  },
+  "nav": {
+    "home": "Home",
+    "agencies": "Agencies",
+    "tours": "Tours",
+    "places": "Places",
+    "restaurants": "Restaurants",
+    "request": "Request Tour",
+    "dashboard": "Dashboard",
+    "admin": "Admin",
+    "login": "Login",
+    "logout": "Logout"
   },
   "footer": {
     "about": "About Us",
@@ -46,10 +129,12 @@
   },
   "common": {
     "loading": "Loading...",
-    "error": "An error occurred",
+    "error": "Something went wrong",
     "back": "Back",
     "save": "Save",
     "cancel": "Cancel",
-    "close": "Close"
+    "close": "Close",
+    "perPerson": "per person",
+    "usd": "USD"
   }
 }

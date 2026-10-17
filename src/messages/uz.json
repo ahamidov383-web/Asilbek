@@ -1,9 +1,33 @@
 {
   "home": {
     "title": "O'zbekiston bo'ylab sayohat",
+    "hero": "Markaziy Osiyoning yuragini kashf eting",
+    "heroSub": "Qadimiy Ipak Yo'li shaharlarini o'rganing, haqiqiy taomlarni tatib ko'ring va O'zbekistonda unutilmas xotiralar yarating",
+    "exploreTours": "Turlarni ko'rish",
+    "findAgencies": "Agentliklarni topish",
     "explorePlaces": "Obyektlarni ko'rish",
     "findRestaurants": "Restoran topish",
     "browseTours": "Turlarni ko'rish",
+    "stats": {
+      "tours": "Mavjud turlar",
+      "agencies": "Tasdiqlangan agentliklar",
+      "places": "Tarixiy joylar",
+      "tourists": "Mamnun sayyohlar"
+    },
+    "popularTitle": "Mashhur yo'nalishlar",
+    "popularSub": "O'zbekistonning eng ko'p tashrif buyuriladigan joylarini kashf eting",
+    "whyTitle": "Nega O'zbekiston?",
+    "whySub": "Qadimiy mo'jizalar va iliq mehmondo'stlik yurti",
+    "features": {
+      "culture": "Boy madaniyat",
+      "cultureDesc": "Ipak yo'li bo'ylab 2000+ yillik tarix",
+      "food": "Ajoyib taomlar",
+      "foodDesc": "Haqiqiy osh, shashlik va 1000+ taom",
+      "safety": "Xavfsiz va mehmondo'st",
+      "safetyDesc": "Markaziy Osiyodagi eng xavfsiz mamlakatlardan biri",
+      "value": "Arzon narxlar",
+      "valueDesc": "Dunyo darajasidagi tajribalar hamyonbop narxlarda"
+    },
     "hero": {
       "title": "Buyuk Ipak Yo'li bo'ylab sayohat",
       "subtitle": "Qadimiy shaharlarni kashf eting"
@@ -11,31 +35,90 @@
   },
   "places": {
     "title": "Diqqatga sazovor joylar",
+    "subtitle": "O'zbekistonning boy merosini o'rganing",
     "howToGet": "Qanday borish mumkin",
     "workHours": "Ish vaqti",
     "ticketPrice": "Chipta narxi",
     "search": "Joylarni qidirish...",
-    "allTypes": "Barcha turlar"
+    "allTypes": "Barcha turlar",
+    "viewMap": "Xaritada ko'rish"
   },
   "restaurants": {
-    "title": "Restoranlar",
+    "title": "Restoranlar va taomlar",
+    "subtitle": "O'zbekistonning mazali taomlarini tatib ko'ring",
     "searchFood": "Taom turini qidirish...",
     "avgPrice": "O'rtacha narx",
     "perPerson": "bir kishi uchun",
-    "menu": "Menyu"
+    "menu": "Menyu",
+    "cuisine": "Oshxona"
   },
   "tours": {
-    "title": "Turlar",
+    "title": "Mavjud turlar",
+    "subtitle": "O'zingizga mos sarguzashtni toping",
     "seats": "joy qoldi",
     "book": "Band qilish",
-    "details": "Batafsil"
+    "details": "Batafsil",
+    "filter": "Filtr",
+    "priceRange": "Narx oralig'i",
+    "search": "Turlarni qidirish...",
+    "full": "Joy yo'q"
   },
   "agencies": {
-    "title": "Agentliklar",
+    "title": "Tasdiqlangan sayyohlik agentliklari",
+    "subtitle": "Ishonchli mahalliy mutaxassislar bilan bog'laning",
     "verified": "Tasdiqlangan",
     "tours": "turlar",
     "reviews": "sharhlar",
-    "viewProfile": "Profilni ko'rish"
+    "viewProfile": "Profilni ko'rish",
+    "search": "Agentliklarni qidirish..."
+  },
+  "request": {
+    "title": "Individual tur so'rash",
+    "subtitle": "Orzuyingizdagi sayohat haqida ayting va agentliklar sizga takliflar yuboradi",
+    "budget": "Byudjet (USD)",
+    "interests": "Qiziqishlar",
+    "interestsPlaceholder": "masalan., Tarix, Taom, Tabiat, Sarguzasht...",
+    "startDate": "Boshlanish sanasi",
+    "endDate": "Tugash sanasi",
+    "submit": "So'rov yuborish",
+    "success": "So'rovingiz yuborildi! Agentliklar ko'rib chiqadi va takliflar yuboradi."
+  },
+  "dashboard": {
+    "title": "Agentlik kabineti",
+    "tours": "Mening turlarim",
+    "requests": "Kiruvchi so'rovlar",
+    "offers": "Mening takliflarim",
+    "addTour": "Tur qo'shish",
+    "updateSeats": "Joylarni yangilash",
+    "sendOffer": "Taklif yuborish",
+    "stats": {
+      "totalTours": "Jami turlar",
+      "activeBookings": "Faol bandlovlar",
+      "totalRevenue": "Jami daromad",
+      "avgRating": "O'rt. reyting"
+    }
+  },
+  "admin": {
+    "title": "Admin paneli",
+    "agencies": "Agentliklarni tekshirish",
+    "content": "Kontent moderatsiyasi",
+    "users": "Foydalanuvchilar",
+    "approve": "Tasdiqlash",
+    "reject": "Rad etish",
+    "pending": "Kutilmoqda",
+    "verified": "Tasdiqlangan"
+  },
+  "nav": {
+    "home": "Bosh sahifa",
+    "agencies": "Agentliklar",
+    "tours": "Turlar",
+    "places": "Joylar",
+    "restaurants": "Restoranlar",
+    "request": "Tur so'rash",
+    "dashboard": "Kabinet",
+    "admin": "Admin",
+    "login": "Kirish",
+    "logout": "Chiqish"
   },
   "footer": {
     "about": "Biz haqimizda",
@@ -50,6 +133,8 @@
     "back": "Orqaga",
     "save": "Saqlash",
     "cancel": "Bekor qilish",
-    "close": "Yopish"
+    "close": "Yopish",
+    "perPerson": "bir kishi uchun",
+    "usd": "USD"
   }
 }
