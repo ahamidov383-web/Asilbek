@@ -10,6 +10,8 @@ import {
 import Map from '../components/Map';
 import ImageGallery from '../components/ImageGallery';
 import { cn } from '../lib/utils';
+import { useLanguage } from '../context/LanguageContext';
+import { getRestaurantTranslation, getMenuItemTranslation } from '../lib/i18n';
 
 // Restoran rasmlari
 const restaurantImages: Record<string, string[]> = {
@@ -43,11 +45,15 @@ const menuCategories = [
 export default function RestaurantDetail() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
+  const { language } = useLanguage();
   const [restaurant, setRestaurant] = useState<Restaurant | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [isFavorite, setIsFavorite] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState('all');
+
+  // Tarjima olish
+  const translation = restaurant ? getRestaurantTranslation(restaurant, language) : null;
 
   useEffect(() => {
     const timer = setTimeout(() => {
