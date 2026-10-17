@@ -124,23 +124,39 @@ export interface Place {
 
 export interface Restaurant {
   id: string;
-  name: string;
-  cuisineType: string[];
-  avgPrice: number;
+  // Multi-language fields
+  name_uz: string;
+  name_ru: string;
+  name_en: string;
+  description_uz?: string | null;
+  description_ru?: string | null;
+  description_en?: string | null;
+  cuisineType: string[]; // Universal
+  avgPrice: number; // Universal
   latitude: number;
   longitude: number;
-  address?: string;
   image?: string;
   rating?: number;
   menuItems: MenuItem[];
+  // Backward compatibility (deprecated)
+  name?: string;
+  address?: string;
 }
 
 export interface MenuItem {
   id: string;
-  name: string;
-  price: number;
-  description: string | null;
+  // Multi-language fields
+  name_uz: string;
+  name_ru: string;
+  name_en: string;
+  description_uz?: string | null;
+  description_ru?: string | null;
+  description_en?: string | null;
+  price: number; // Universal
   restaurantId?: string;
+  // Backward compatibility (deprecated)
+  name?: string;
+  description?: string | null;
 }
 
 // ============================================

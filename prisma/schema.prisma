@@ -122,15 +122,14 @@ model Place {
 
 model Restaurant {
   id              String     @id @default(cuid())
-  // Multi-language fields
   name_uz         String
   name_ru         String
   name_en         String
-  address_uz      String?
-  address_ru      String?
-  address_en      String?
+  description_uz  String?
+  description_ru  String?
+  description_en  String?
   cuisineType     String[]   // Universal (tarjima qilinmaydi)
-  avgPrice        Float      // Universal
+  avgPrice        Float
   latitude        Float
   longitude       Float
   menuItems       MenuItem[]

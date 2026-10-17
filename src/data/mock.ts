@@ -393,18 +393,22 @@ export const places: Place[] = [
 export const restaurants: Restaurant[] = [
   {
     id: 'r1',
-    name: 'Central Asian Plov Center',
+    name_uz: 'Markaziy Osh Markazi',
+    name_ru: 'Центр Среднеазиатского Плова',
+    name_en: 'Central Asian Plov Center',
+    description_uz: 'Toshkentdagi eng mashhur osh markazi. An\'anaviy o\'zbek oshini tatib ko\'ring.',
+    description_ru: 'Самый известный центр плова в Ташкенте. Попробуйте традиционный узбекский плов.',
+    description_en: 'The most famous plov center in Tashkent. Taste traditional Uzbek plov.',
     cuisineType: ['plov', 'osh', 'rice'],
     avgPrice: 8,
     latitude: 41.3100,
     longitude: 69.2800,
     image: '🍚',
-    address: '127 Bukhara Street, Tashkent',
     rating: 4.8,
     menuItems: [
-      { id: 'm1', name: 'Tashkent Plov', price: 3.5, description: 'Traditional yellow carrot plov with beef' },
-      { id: 'm2', name: 'Samarkand Plov', price: 4.0, description: 'Layered plov with chickpeas and barberries' },
-      { id: 'm3', name: 'Wedding Plov (Toy Osh)', price: 5.0, description: 'Special occasion plov with quince and raisins' },
+      { id: 'm1', name_uz: 'Toshkent oshi', name_ru: 'Ташкентский плов', name_en: 'Tashkent Plov', price: 3.5, description_uz: 'Morkovli an\'anaviy osh', description_ru: 'Традиционный плов с морковью', description_en: 'Traditional yellow carrot plov with beef' },
+      { id: 'm2', name_uz: 'Samarqand oshi', name_ru: 'Самаркандский плов', name_en: 'Samarkand Plov', price: 4.0, description_uz: 'No\'xat va zirk bilan qatlamali osh', description_ru: 'Слоеный плов с нутом и барбарисом', description_en: 'Layered plov with chickpeas and barberries' },
+      { id: 'm3', name_uz: 'To\'y oshi', name_ru: 'Свадебный плов', name_en: 'Wedding Plov (Toy Osh)', price: 5.0, description_uz: 'Behi va mayizli maxsus osh', description_ru: 'Особый плов с айвой и изюмом', description_en: 'Special occasion plov with quince and raisins' },
     ],
   },
   {
