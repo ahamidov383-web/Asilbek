@@ -25,6 +25,7 @@ import Places from './pages/Places';
 import PlaceDetail from './pages/PlaceDetail';
 import Restaurants from './pages/Restaurants';
 import RestaurantDetail from './pages/RestaurantDetail';
+import Prices from './pages/Prices';
 import RequestTour from './pages/RequestTour';
 import Requests from './pages/Requests';
 
@@ -79,7 +80,9 @@ function App() {
               <Route path="/places" element={<Places />} />
               <Route path="/places/:id" element={<PlaceDetail />} />
               <Route path="/restaurants" element={<Restaurants />} />
-              <Route path="/restaurants/:id" element={<RestaurantDetail />} />                <Route path="/request" element={<RequestTour />} />
+              <Route path="/restaurants/:id" element={<RestaurantDetail />} />
+              <Route path="/prices" element={<Prices />} />
+              <Route path="/request" element={<RequestTour />} />
                 <Route path="/requests" element={<Requests />} />
               </Route>
 

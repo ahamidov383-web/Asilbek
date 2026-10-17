@@ -18,6 +18,7 @@ export default function TouristLayout({ children }: { children: React.ReactNode 
     { path: '/restaurants', label: 'Restoranlar' },
     { path: '/agencies', label: 'Agentliklar' },
     { path: '/tours', label: 'Turlar' },
+    { path: '/prices', label: 'Narxlar' },
     { path: '/requests', label: 'So\'rovlarim' },
   ];
 
