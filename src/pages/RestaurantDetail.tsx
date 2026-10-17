@@ -99,19 +99,20 @@ export default function RestaurantDetail() {
   const filteredMenuItems = selectedCategory === 'all'
     ? restaurant.menuItems
     : restaurant.menuItems.filter(item => {
+        const itemName = (item.name_uz || item.name || '').toLowerCase();
         // Oddiy kategoriyalash (haqiqiy loyihada database dan keladi)
         if (selectedCategory === 'hot') {
-          return item.name.toLowerCase().includes('osh') || 
-                 item.name.toLowerCase().includes('lag\'mon') ||
-                 item.name.toLowerCase().includes('shashlik');
+          return itemName.includes('osh') || 
+                 itemName.includes('lag\'mon') ||
+                 itemName.includes('shashlik');
         }
         if (selectedCategory === 'soup') {
-          return item.name.toLowerCase().includes('sho\'rva') || 
-                 item.name.toLowerCase().includes('mastava');
+          return itemName.includes('sho\'rva') || 
+                 itemName.includes('mastava');
         }
         if (selectedCategory === 'drinks') {
-          return item.name.toLowerCase().includes('choy') || 
-                 item.name.toLowerCase().includes('ayron');
+          return itemName.includes('choy') || 
+                 itemName.includes('ayron');
         }
         return true;
       });
@@ -136,7 +137,7 @@ export default function RestaurantDetail() {
           {/* Main Content */}
           <div className="lg:col-span-2 space-y-6">
             {/* Image Gallery */}
-            <ImageGallery images={images} title={restaurant.name} />
+            <ImageGallery images={images} title={restaurant.name_uz || restaurant.name || ''} />
 
             {/* Title & Actions */}
             <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
@@ -285,7 +286,7 @@ export default function RestaurantDetail() {
                   {
                     id: restaurant.id,
                     position: [restaurant.latitude, restaurant.longitude],
-                    title: restaurant.name,
+                    title: restaurant.name_uz || restaurant.name || '',
                     type: 'restaurant',
                     description: restaurant.cuisineType.join(', '),
                   },

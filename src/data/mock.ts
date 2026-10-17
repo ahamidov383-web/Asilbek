@@ -422,9 +422,9 @@ export const restaurants: Restaurant[] = [
     address: '45 Registan Street, Samarkand',
     rating: 4.6,
     menuItems: [
-      { id: 'm4', name: 'Lamb Shashlik', price: 4.0, description: 'Tender lamb cubes grilled over charcoal' },
-      { id: 'm5', name: 'Kebab Mix', price: 8.0, description: 'Assorted grilled meats with fresh vegetables' },
-      { id: 'm6', name: 'Tikka', price: 5.0, description: 'Marinated chicken pieces, grilled to perfection' },
+      { id: 'm4', name_uz: 'Qo\'zichoq shashligi', name_ru: 'Шашлык из ягненка', name_en: 'Lamb Shashlik', price: 4.0, description_uz: 'Ko\'mir ustida pishirilgan yumshoq qo\'zichoq', description_ru: 'Нежные кусочки ягненка на углях', description_en: 'Tender lamb cubes grilled over charcoal' },
+      { id: 'm5', name_uz: 'Kabob aralashmasi', name_ru: 'Ассорти кебабов', name_en: 'Kebab Mix', price: 8.0, description_uz: 'Yangi sabzavotlar bilan turli xil kaboblar', description_ru: 'Ассорти жареных мяс со свежими овощами', description_en: 'Assorted grilled meats with fresh vegetables' },
+      { id: 'm6', name_uz: 'Tikka', name_ru: 'Тикка', name_en: 'Tikka', price: 5.0, description_uz: 'Marinadlangan tovuq bo\'laklari', description_ru: 'Маринованные кусочки курицы', description_en: 'Marinated chicken pieces, grilled to perfection' },
     ],
   },
   {

@@ -124,10 +124,10 @@ export interface Place {
 
 export interface Restaurant {
   id: string;
-  // Multi-language fields
-  name_uz: string;
-  name_ru: string;
-  name_en: string;
+  // Multi-language fields (ixtiyoriy - backward compatibility uchun)
+  name_uz?: string;
+  name_ru?: string;
+  name_en?: string;
   description_uz?: string | null;
   description_ru?: string | null;
   description_en?: string | null;
@@ -145,10 +145,10 @@ export interface Restaurant {
 
 export interface MenuItem {
   id: string;
-  // Multi-language fields
-  name_uz: string;
-  name_ru: string;
-  name_en: string;
+  // Multi-language fields (ixtiyoriy - backward compatibility uchun)
+  name_uz?: string;
+  name_ru?: string;
+  name_en?: string;
   description_uz?: string | null;
   description_ru?: string | null;
   description_en?: string | null;

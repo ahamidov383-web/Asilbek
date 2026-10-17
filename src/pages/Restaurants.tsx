@@ -65,11 +65,12 @@ export default function Restaurants() {
     // Qidiruv
     if (searchQuery) {
       const query = searchQuery.toLowerCase();
-      result = result.filter(r =>
-        r.name.toLowerCase().includes(query) ||
-        r.cuisineType.some(c => c.toLowerCase().includes(query)) ||
-        r.menuItems.some(m => m.name.toLowerCase().includes(query))
-      );
+      result = result.filter(r => {
+        const name = r.name_uz || r.name || '';
+        return name.toLowerCase().includes(query) ||
+          r.cuisineType.some(c => c.toLowerCase().includes(query)) ||
+          r.menuItems.some(m => (m.name_uz || m.name || '').toLowerCase().includes(query));
+      });
     }
 
     // Oshxona turi
@@ -106,7 +107,7 @@ export default function Restaurants() {
         result.sort((a, b) => b.avgPrice - a.avgPrice);
         break;
       case 'name':
-        result.sort((a, b) => a.name.localeCompare(b.name));
+        result.sort((a, b) => (a.name_uz || a.name || '').localeCompare(b.name_uz || b.name || ''));
         break;
     }
 

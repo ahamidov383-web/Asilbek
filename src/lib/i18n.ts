@@ -2,6 +2,7 @@ import { Language } from './types';
 
 /**
  * Ko'p tilli ma'lumotlarni olish uchun helper funksiyalar
+ * Next.js next-intl o'rniga React LanguageContext bilan ishlaydi
  */
 
 // Place uchun tarjima olish
@@ -19,7 +20,7 @@ export function getRestaurantTranslation(restaurant: any, lang: Language) {
   const suffix = `_${lang}`;
   return {
     name: restaurant[`name${suffix}`] || restaurant.name_uz || restaurant.name_en || '',
-    address: restaurant[`address${suffix}`] || restaurant.address_uz || restaurant.address_en || '',
+    description: restaurant[`description${suffix}`] || restaurant.description_uz || restaurant.description_en || '',
   };
 }
 
@@ -54,4 +55,36 @@ export function getTourTranslation(tour: any, lang: Language) {
 export function getTranslation(obj: any, field: string, lang: Language): string {
   const suffix = `_${lang}`;
   return obj[`${field}${suffix}`] || obj[`${field}_uz`] || obj[`${field}_en`] || '';
+}
+
+/**
+ * Next.js getLocalizedField funksiyasining React versiyasi
+ * Server-side emas, balki client-side da ishlaydi
+ */
+export function getLocalizedField<T extends Record<string, any>>(
+  item: T,
+  fieldBase: string,
+  lang: Language
+): string {
+  const fieldName = `${fieldBase}_${lang}` as keyof T;
+  return (item[fieldName] as string) || (item[`${fieldBase}_uz`] as string) || '';
+}
+
+/**
+ * Next.js getLocalizedObject funksiyasining React versiyasi
+ * Ko'p maydonlarni bir vaqtda tarjima qilish
+ */
+export function getLocalizedObject<T extends Record<string, any>>(
+  item: T,
+  fields: string[],
+  lang: Language
+): Record<string, string> {
+  const result: Record<string, string> = {};
+  
+  for (const field of fields) {
+    const fieldName = `${field}_${lang}` as keyof T;
+    result[field] = (item[fieldName] as string) || (item[`${field}_uz`] as string) || '';
+  }
+  
+  return result;
 }
